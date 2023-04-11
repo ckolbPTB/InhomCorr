@@ -1,0 +1,17 @@
+# Runtime requirements
+--requirement requirements.txt
+
+# Testing
+codecov
+pre-commit
+
+# Linting/Tooling
+flake8
+mypy
+isort
+pre-commit
+autopep8
+
+# Documentation
+sphinx
+sphinx_rtd_theme
