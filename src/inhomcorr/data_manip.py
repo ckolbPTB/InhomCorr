@@ -39,4 +39,4 @@ def normalise_image(im: np.ndarray) -> np.ndarray:
     assert isinstance(im, np.ndarray), (
         f'Image should be numpy array. Got {type(im)}'
     )
-    return(im - np.min(im))/(np.max(im) - np.min(im))
+    return (im - np.min(im))/(np.max(im) - np.min(im))

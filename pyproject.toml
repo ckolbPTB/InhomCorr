@@ -8,20 +8,18 @@ version = "0.0.1"
 description = "A python project to remove inhomogeneities from MRI images."
 readme = "README.md"
 requires-python = ">=3.7"
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 keywords = ["MRI, inhomogeneities, DCE, AI"]
 authors = [
-  { name="Christoph Kolbitsch", email="christoph.kolbitsch@ptb.de" },
-  { name="Patrick Schuenke", email="patrick.schuenke@ptb.de" },
+    { name = "Christoph Kolbitsch", email = "christoph.kolbitsch@ptb.de" },
+    { name = "Patrick Schuenke", email = "patrick.schuenke@ptb.de" },
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 
-dependencies = [
-    "numpy",
-]
+dependencies = ["numpy"]
 
 [project.urls]
 "repository" = "https://github.com/ckolbPTB/InhomCorr"
@@ -53,5 +51,5 @@ exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 79
-sections = ["FUTURE", "STDLIB", "FIRSTPARTY" , "THIRDPARTY", "LOCALFOLDER"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 force_single_line = "True"
