@@ -10,6 +10,7 @@ jobs:
       - name: Build HTML
         uses: ammaraskar/sphinx-action@master
         with:
+          docs-folder: "docs/"
           pre-build-command: python -m pip install sphinx_rtd_theme
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
