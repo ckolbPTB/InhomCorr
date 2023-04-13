@@ -18,7 +18,7 @@ jobs:
           pip install --upgrade pip
           pip install .
           pip install -r ./docs/requirements.txt
-          sphinx-build docs ./docs/build/html/
+          sphinx-build docs/source ./docs/build/html/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
