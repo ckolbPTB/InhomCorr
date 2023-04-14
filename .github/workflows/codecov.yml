@@ -3,7 +3,7 @@ name: Code coverage
 on:
   pull_request:
   push:
-    branches: [main, master, unittest]
+    branches: [main, master]
 
 jobs:
   run:

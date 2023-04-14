@@ -2,7 +2,6 @@ name: unittest
 
 on:
   push:
-    branches: [main, unittest]
     paths-ignore:
       - "**.md"
   pull_request:
