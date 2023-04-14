@@ -1,3 +1,17 @@
+################################
+########### FOLDERS ############
+################################
+build/
+html/
+.benchmarks/
+reports/
+lectures/
+.mypy_cache/
+
+################################
+########### PYTHON #############
+################################
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,3 +141,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+################################
+########### VS CODE ############
+################################
+.vscode
+*.code-workspace
+.history
