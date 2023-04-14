@@ -3,7 +3,7 @@ name: Code coverage
 on:
   pull_request:
   push:
-    branches: [main, master]
+    branches: [main, master, unittest]
 
 jobs:
   run:
@@ -23,5 +23,5 @@ jobs:
           coverage run -m unittest
           coverage report
 
-      # - name: Upload Coverage to Codecov
-      #   uses: codecov/codecov-action@v2
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v2
