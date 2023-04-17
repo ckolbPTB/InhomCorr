@@ -5,6 +5,12 @@ on:
   push:
     branches: [main, master]
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,7 +27,7 @@ jobs:
           pip install --upgrade pip
           pip install .
           pip install -r ./docs/requirements.txt
-          sphinx-build docs/source ./docs/build/html/
+          sphinx-build docs/source docs/build/html/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -31,7 +37,6 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/build/html
