@@ -4,7 +4,7 @@ import numpy as np
 
 class DummyClass:
     """
-     This is a simple dummy class for documentation purposes.
+    This is a simple dummy class for documentation purposes.
     """
 
     def __init__(self, data: np.ndarray) -> None:
