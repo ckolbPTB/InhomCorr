@@ -4,8 +4,7 @@ import numpy as np
 
 
 def normalise_image(im: np.ndarray) -> np.ndarray:
-    """
-    normalise_image normalises an image array to the range [0, 1]
+    """normalise_image normalises an image array to the range [0, 1].
 
     Parameters
     ----------
@@ -17,7 +16,6 @@ def normalise_image(im: np.ndarray) -> np.ndarray:
     np.ndarray
         normalised image
     """
-
     assert isinstance(im, np.ndarray), (
         f'Image should be numpy array. Got {type(im)}'
     )
