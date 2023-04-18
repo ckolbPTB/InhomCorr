@@ -2,6 +2,7 @@
 --requirement requirements.txt
 
 # Testing
+coverage
 codecov
 pre-commit
 
