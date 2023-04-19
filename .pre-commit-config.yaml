@@ -6,9 +6,15 @@ repos:
     hooks:
       - id: check-ast
       - id: check-builtin-literals
+      - id: check-docstring-first
       - id: check-merge-conflict
       - id: check-yaml
       - id: check-toml
+      - id: check-json
+      - id: double-quote-string-fixer
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
@@ -25,6 +31,7 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
+        args: [--exclude=__init__.py]
         exclude: ^docs/
 
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -32,3 +39,18 @@ repos:
     hooks:
       - id: mypy
         exclude: ^docs/
+
+  - repo: https://github.com/myint/docformatter
+    rev: v1.4
+    hooks:
+      - id: docformatter
+        args: ["--in-place"]
+
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.1.1
+    hooks:
+      - id: pydocstyle
+        exclude: __init__.py
+        files: ^src/
+        additional_dependencies:
+          - toml

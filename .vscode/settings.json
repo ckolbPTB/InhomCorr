@@ -1,0 +1,21 @@
+{
+    "autoDocstring.docstringFormat": "numpy-notypes",
+    "python.languageServer": "Pylance",
+    "python.formatting.provider": "autopep8",
+    "python.linting.flake8Enabled": true,
+    "python.linting.pydocstyleEnabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "mypy.enabled": true,
+    "mypy.runUsingActiveInterpreter": true,
+    "mypy.configFile": "pyproject.toml",
+    "editor.formatOnSave": true
+}
