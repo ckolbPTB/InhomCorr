@@ -10,8 +10,7 @@
 1. Clone the repo
 2. Create/select a python environment
 3. Open terminal in the "InhomCorr" main folder
-4. Install all required developer tools:  ```pip install -r requirements-dev.txt```
-5. Install "InhomCorr" in editable mode: ``` pip install -e . ```
+5. Install "InhomCorr" in editable mode: ``` pip install -e .[lint,test] ```
 
 ## Recommended IDE and Extensions
 
