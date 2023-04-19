@@ -31,7 +31,8 @@ lint = [
   "flake8",
   "isort",
   "pre-commit",
-  "autopep8"
+  "autopep8",
+  "pydocstyle"
 ]
 docs = [
   "sphinx",
