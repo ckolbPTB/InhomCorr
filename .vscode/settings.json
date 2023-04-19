@@ -17,5 +17,5 @@
     "mypy.enabled": true,
     "mypy.runUsingActiveInterpreter": true,
     "mypy.configFile": "pyproject.toml",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
 }
