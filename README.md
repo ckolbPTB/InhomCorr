@@ -10,8 +10,8 @@
 1. Clone the repo
 2. Create/select a python environment
 3. Open terminal in the "InhomCorr" main folder
-5. Install "InhomCorr" in editable mode: ``` pip install -e .[lint,test] ```
-
+4. Install "InhomCorr" in editable mode with linting and testing: ``` pip install -e ".[lint,test]" ```
+5. Setup Pre-Commit Hook: ``` pre-commit install ```
 ## Recommended IDE and Extensions
 
 We recommend to use [Microsoft Visual Studio Code](https://code.visualstudio.com/download) with the following extensions:
