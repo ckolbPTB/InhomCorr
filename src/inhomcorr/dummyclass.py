@@ -14,7 +14,7 @@ class DummyClass:
         data :
             input image data
         """
-        self.data: NDArray = data
+        self.data: NDArray =data
         self.id: int = 0
 
     def increase_id(self) -> None:
