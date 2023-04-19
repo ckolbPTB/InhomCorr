@@ -1,0 +1,8 @@
+{
+    "autoDocstring.docstringFormat": "numpy-notypes",
+    "python.languageServer": "Pylance",
+    "python.formatting.provider": "autopep8",
+    "python.linting.flake8Enabled": true,
+    "mypy.enabled": true,
+    "mypy.runUsingActiveInterpreter": true
+}

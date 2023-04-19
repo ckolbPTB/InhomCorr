@@ -145,6 +145,10 @@ dmypy.json
 ################################
 ########### VS CODE ############
 ################################
-.vscode
+.vscode/**/*
 *.code-workspace
-.history
+**/.history
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
