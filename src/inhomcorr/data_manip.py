@@ -9,7 +9,7 @@ def normalise_image(im: NDArray) -> NDArray:
 
     Parameters
     ----------
-    im : 
+    im :
         input image
 
     Returns
