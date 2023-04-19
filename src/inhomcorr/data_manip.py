@@ -1,19 +1,20 @@
 """data_manip.py contains functions for data processing and manipulation."""
 
 import numpy as np
+from numpy.typing import NDArray
 
 
-def normalise_image(im: np.ndarray) -> np.ndarray:
+def normalise_image(im: NDArray) -> NDArray:
     """normalise_image normalises an image array to the range [0, 1].
 
     Parameters
     ----------
-    im : np.ndarray
+    im : 
         input image
 
     Returns
     -------
-    np.ndarray
+    NDArray
         normalised image
     """
     assert isinstance(im, np.ndarray), (

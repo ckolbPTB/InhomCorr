@@ -1,19 +1,20 @@
 """Contains the DummyClass class."""
 import numpy as np
+from numpy.typing import NDArray
 
 
 class DummyClass:
     """Dummy class for documentation purposes."""
 
-    def __init__(self, data: np.ndarray) -> None:
+    def __init__(self, data: NDArray) -> None:
         """__init__ is the constructor for the DummyClass.
 
         Parameters
         ----------
-        data : np.ndarray
+        data :
             input image data
         """
-        self.data: np.ndarray = data
+        self.data: NDArray = data
         self.id: int = 0
 
     def increase_id(self) -> None:
