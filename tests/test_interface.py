@@ -23,3 +23,16 @@ class TestImageData(unittest.TestCase):
         shape = self.getRandom2DShape()
         dummy.data = self.getRandom2DData(shape)
         self.assertEqual(dummy.shape, shape)
+
+    def test_setMask(self):
+        dummy = interface.ImageData()
+        shape = self.getRandom2DShape()
+        dummy_mask = torch.randint(1, shape)
+        dummy.mask = dummy_mask
+        torch.testing.assert_close(dummy.mask, dummy_mask)
+
+    def test_setHeader(self):
+        dummy = interface.ImageData()
+        dummy_header = {'test': 8956}
+        dummy.header = dummy_header
+        self.assertEqual(dummy.header['test'], dummy_header['test'])
