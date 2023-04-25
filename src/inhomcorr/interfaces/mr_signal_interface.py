@@ -1,6 +1,6 @@
-"""File: mr_signal_interface.py."""
-from inhomcorr.interfaces.mr_data_interface import ImageData
-from inhomcorr.interfaces.mr_data_interface import QMRIData
+"""MRSignal Interface."""
+from .mr_data_interface import ImageData
+from .mr_data_interface import QMRIData
 
 
 class MRSignalInterface:

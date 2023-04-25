@@ -1,4 +1,4 @@
-"""File: mr_data_interfaces.py."""
+"""MRData Interface."""
 import torch
 
 
