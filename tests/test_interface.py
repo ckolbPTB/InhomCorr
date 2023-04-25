@@ -1,25 +1,17 @@
+"""Image data interface tests."""
 import unittest
 
-import numpy as np
-import torch
+from testdata import TestData
 
 import inhomcorr.interfaces.mr_data_interface as interface
 
 
 class TestImageData(unittest.TestCase):
 
-    def getRandomPixelNumber(self, nmax=32):
-        return np.random.randint(1, nmax)
+    def SetUp(self):
+        self.data = TestData()
 
-    def getRandom2DShape(self):
-        npix = self.getRandomPixelNumber()
-        return (1, 1, npix, npix)
-
-    def getRandom2DData(self, shape):
-        return torch.rand(shape)
-
-    def test_2Dshape(self):
+    def test_2D_shape(self):
         dummy = interface.ImageData()
-        shape = self.getRandom2DShape()
-        dummy.data = self.getRandom2DData(shape)
-        self.assertEqual(dummy.shape, shape)
+        dummy.data = self.data.get_random_tensor()
+        self.assertEqual(dummy.shape, self.data.dim)
