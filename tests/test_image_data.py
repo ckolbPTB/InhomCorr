@@ -1,9 +1,9 @@
 """Image data interface tests."""
 import unittest
 
-from testdata import TestData
+from inhomcorr.interfaces.mr_data_interface import ImageData
 
-import inhomcorr.interfaces.mr_data_interface as interface
+from .testdata import TestData
 
 
 class TestImageData(unittest.TestCase):
@@ -12,6 +12,6 @@ class TestImageData(unittest.TestCase):
         self.data = TestData()
 
     def test_2D_shape(self):
-        dummy = interface.ImageData()
+        dummy = ImageData()
         dummy.data = self.data.get_random_tensor()
         self.assertEqual(dummy.shape, self.data.dim)
