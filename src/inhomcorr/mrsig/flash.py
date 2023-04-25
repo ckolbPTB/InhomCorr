@@ -1,4 +1,4 @@
-"""flash_t1.py."""
+"""Flash T1 Simulation."""
 
 from dataclasses import dataclass
 
@@ -47,10 +47,10 @@ class MRSigFlash(MRSig):
         -------
             _description_
         """
+        # define GRE steady state signal equation
         if qmap.t1 is None:
             raise AttributeError('T1 map not defined')
 
-        # define GRE steady state signal equation
         e1 = torch.exp(-param.tr / qmap.t1)
         greimage = qmap.rho * (1-e1) * torch.sin(torch.tensor(param.alpha)) / \
             (1 - torch.cos(torch.tensor(param.alpha)) * e1)
