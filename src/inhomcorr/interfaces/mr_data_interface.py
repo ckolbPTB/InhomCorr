@@ -6,58 +6,89 @@ class MRData():
     """Basic MR Data Class."""
 
     def __init__(self) -> None:
-        pass
+        self._header: dict = {}
+        self._mask: torch.Tensor[torch.int] | None = None
+
+    @property
+    def header(self) -> dict:
+        """Header getter function.
+
+        Returns
+        -------
+            Header dictionary
+        """
+        return self._header
+
+    @property
+    def mask(self) -> torch.Tensor[torch.int] | None:
+        """Mask getter function.
+
+        Returns
+        -------
+            Mask tensor
+        """
+        return self._mask
+
+    # TODO: Implementation of setter functions
 
 
-class QMRIData(MRData):
+class ImageData(MRData):
     """MR Data Class for Quantitative Data."""
 
     def __init__(self) -> None:
         super().__init__()
+        self._data: torch.Tensor[torch.cfloat] | None = None
 
 
-class ImageData(MRData):
+class QMRIData(MRData):
     """Image Data Class for Image Data."""
 
     def __init__(self) -> None:
         super().__init__()
-        self.__t1_map = torch.tensor()
-        self.__t2_map = torch.tensor()
-        self.__B0_map = torch.tensor()
-        self.__rho = torch.tenor()
+        self._t1: torch.Tensor[torch.float] | None = None
+        self._rho: torch.Tensor[torch.float] | None = None
 
-    def get_T1_map(self) -> torch.Tensor:
+        # To be added in the future
+        # self._t2: torch.Tensor[torch.float] | None = None
+        # self._db0: torch.Tensor[torch.float] | None = None
+
+    @property
+    def t1(self) -> torch.Tensor[torch.float]:
         """Getter of T1 map.
 
         Returns
         -------
             T1 map tensor
         """
-        return self.__t1_map
+        return self._t1
 
-    def get_T2_map(self) -> torch.Tensor:
-        """Getter of T2 map.
+    @t1.setter
+    def t1(self, value: torch.Tensor[torch.float]) -> None:
+        """Setter for t1.
+
+        Parameters
+        ----------
+        var
+            T1 map tensor
+        """
+        self._t1 = value
+
+    @property
+    def rho(self) -> torch.Tensor[torch.float]:
+        """Getter of rho.
 
         Returns
         -------
-            T2 map tensor
+            rho tensor
         """
-        return self.__t2_map
+        return self._rho
 
-    def get_B0_map(self) -> torch.Tensor:
-        """Getter of B0 map.
+    @rho.setter
+    def rho(self, value: torch.Tensor[torch.float]) -> None:
+        """Setter of rho.
 
         Returns
         -------
-            B0 map tensor
+            None
         """
-        return self.__B0_map
-
-    def get_rho_map(self) -> torch.Tensor:
-        """Getter of density distribution.
-
-        Returns
-        -------
-            Densiy map tensor
-        """
-        return self.__rho
+        self._rho = value
