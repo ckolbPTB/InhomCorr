@@ -134,7 +134,7 @@ class N4Estimator(BiasEstimator):
         biasfield = np.exp(biasfield)
         biasfield = torch.FloatTensor(biasfield)
 
-        biasfield_img = image
+        biasfield_img = ImageData()
         biasfield_img.data = biasfield
 
         return biasfield_img
