@@ -2,7 +2,7 @@
 from abc import ABC
 from abc import abstractmethod
 
-from .mr_data_interface import ImageData
+from inhomcorr.interfaces import ImageData
 
 
 class HyperParameters(ABC):
