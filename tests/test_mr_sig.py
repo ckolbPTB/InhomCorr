@@ -10,7 +10,7 @@ class TestMRSigFlash(unittest.TestCase):
 
     def setUp(self):
         testdata = TestData()
-        self.dim = testdata.dim
+        self.shape = testdata.shape
         self.qmri = testdata.get_random_qmri()
         self.param = testdata.get_mr_param_gre()
 
@@ -20,5 +20,5 @@ class TestMRSigFlash(unittest.TestCase):
         img = mrsig(self.qmri, self.param)
 
         # Test shape and dtype
-        self.assertEqual(self.dim, img.shape)
+        self.assertEqual(self.shape, img.shape)
         self.assertIsInstance(img, ImageData)

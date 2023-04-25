@@ -1,6 +1,8 @@
 """Image data interface tests."""
 import unittest
 
+import torch
+
 from inhomcorr.interfaces.mr_data_interface import ImageData
 from tests.testdata import TestData
 

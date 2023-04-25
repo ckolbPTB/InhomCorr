@@ -47,6 +47,9 @@ class MRSigFlash(MRSig):
         -------
             _description_
         """
+        if qmap.t1 is None:
+            raise AttributeError('T1 map not defined')
+
         # define GRE steady state signal equation
         e1 = torch.exp(-param.tr / qmap.t1)
         greimage = qmap.rho * (1-e1) * torch.sin(torch.tensor(param.alpha)) / \
