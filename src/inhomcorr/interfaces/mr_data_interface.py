@@ -7,7 +7,7 @@ class MRData():
 
     def __init__(self) -> None:
         self._header: dict = {}
-        self._mask: torch.Tensor[torch.int] | None = None
+        self._mask: torch.IntTensor | None = None
 
     @property
     def header(self) -> dict:
@@ -20,7 +20,7 @@ class MRData():
         return self._header
 
     @property
-    def mask(self) -> torch.Tensor[torch.int] | None:
+    def mask(self) -> torch.IntTensor | None:
         """Mask getter function.
 
         Returns
@@ -33,27 +33,64 @@ class MRData():
 
 
 class ImageData(MRData):
-    """MR Data Class for Quantitative Data."""
+    """Image Data Class."""
 
     def __init__(self) -> None:
         super().__init__()
-        self._data: torch.Tensor[torch.cfloat] | None = None
+        self._data: torch.FloatTensor | None = None
+
+    @property
+    def data(self) -> torch.FloatTensor | None:
+        """Getter for data.
+
+        Returns
+        -------
+            torch.FloatTensor
+        """
+        return self._data
+
+    @data.setter
+    def data(self, value: torch.FloatTensor):
+        """Setter for data.
+
+        Parameters
+        ----------
+        value
+            torch.FloatTensor
+
+        Returns
+        -------
+            None
+        """
+        self._data = value
+
+    @property
+    def shape(self) -> tuple | None:
+        """Getter for shape of data.
+
+        Returns
+        -------
+            Shape of _data tensor or None.
+        """
+        if self._data is None:
+            return None
+        return self._data.shape
 
 
 class QMRIData(MRData):
-    """Image Data Class for Image Data."""
+    """QMRI Data Class."""
 
     def __init__(self) -> None:
         super().__init__()
-        self._t1: torch.Tensor[torch.float] | None = None
-        self._rho: torch.Tensor[torch.float] | None = None
+        self._t1: torch.FloatTensor | None = None
+        self._rho: torch.FloatTensor | None = None
 
         # To be added in the future
         # self._t2: torch.Tensor[torch.float] | None = None
         # self._db0: torch.Tensor[torch.float] | None = None
 
     @property
-    def t1(self) -> torch.Tensor[torch.float]:
+    def t1(self) -> torch.FloatTensor:
         """Getter of T1 map.
 
         Returns
@@ -63,7 +100,7 @@ class QMRIData(MRData):
         return self._t1
 
     @t1.setter
-    def t1(self, value: torch.Tensor[torch.float]) -> None:
+    def t1(self, value: torch.FloatTensor) -> None:
         """Setter for t1.
 
         Parameters
@@ -74,7 +111,7 @@ class QMRIData(MRData):
         self._t1 = value
 
     @property
-    def rho(self) -> torch.Tensor[torch.float]:
+    def rho(self) -> torch.FloatTensor:
         """Getter of rho.
 
         Returns
@@ -84,7 +121,7 @@ class QMRIData(MRData):
         return self._rho
 
     @rho.setter
-    def rho(self, value: torch.Tensor[torch.float]) -> None:
+    def rho(self, value: torch.FloatTensor) -> None:
         """Setter of rho.
 
         Returns

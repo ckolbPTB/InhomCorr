@@ -57,7 +57,7 @@ exclude = ["docs"]
 # Black section
 [tool.black]
 line-length = 79
-target-version = ['py311']
+target-version = ['py310']
 exclude = '''
 /(
     \.git
