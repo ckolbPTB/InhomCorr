@@ -9,6 +9,7 @@ class MRData():
     def __init__(self) -> None:
         self._header: dict = {}
         self._mask: torch.IntTensor | None = None
+        self._shape: torch.Size | None = None
 
     @property
     def header(self) -> dict:
@@ -58,7 +59,45 @@ class MRData():
         -------
             None
         """
+        if self._shape is None:
+            raise Exception(
+                'Mask cannot be set for an otherwise empty MRData object.')
+        elif self._shape != value.shape:
+            raise Exception(
+                'Mask has to have the same shape as the other MRData'
+                'data objects.')
         self._mask = value
+
+    @property
+    def shape(self) -> tuple | None:
+        """Getter for shape of tensors.
+
+        Returns
+        -------
+            Shape of tensors.
+        """
+        return self._shape
+
+    @shape.setter
+    def shape(self, value: torch.Size):
+        """Setter for shape.
+
+        Parameters
+        ----------
+        value
+            torch.Size
+
+        Returns
+        -------
+            None
+        """
+        if self._shape is None:
+            self._shape = value
+        elif self._shape != value:
+            raise Exception(
+                f'Shape ({value}) has to be the same as existing'
+                f'_shape ({self._shape}).')
+        self._shape = value
 
 
 class ImageData(MRData):
@@ -91,6 +130,7 @@ class ImageData(MRData):
         -------
             None
         """
+        self.shape = value.shape
         self._data = value
 
     @property
@@ -109,18 +149,6 @@ class ImageData(MRData):
 
         return self._data.numpy(force=True)
 
-    @property
-    def shape(self) -> tuple | None:
-        """Getter for shape of data.
-
-        Returns
-        -------
-            Shape of _data tensor or None.
-        """
-        if self._data is None:
-            return None
-        return self._data.shape
-
 
 class QMRIData(MRData):
     """QMRI Data Class."""
@@ -128,7 +156,9 @@ class QMRIData(MRData):
     def __init__(self) -> None:
         super().__init__()
         self._t1: torch.FloatTensor | None = None
+        self._t1_default_value: torch.float = torch.inf
         self._rho: torch.FloatTensor | None = None
+        self._rho_default_value: torch.float = 0.0
 
         # To be added in the future
         # self._t2: torch.Tensor[torch.float] | None = None
@@ -142,7 +172,13 @@ class QMRIData(MRData):
         -------
             T1 map tensor
         """
-        return self._t1
+        if self._shape is None and self._t1 is None:
+            raise Exception(
+                'At least one parameter (e.g. t1) of QMRIData has to be set.')
+        elif self._t1 is None:
+            return (torch.FloatTensor(self._shape)*self._t1_default_value)
+        else:
+            return self._t1
 
     @t1.setter
     def t1(self, value: torch.FloatTensor) -> None:
@@ -153,6 +189,7 @@ class QMRIData(MRData):
         var
             T1 map tensor
         """
+        self.shape = value.shape
         self._t1 = value
 
     @property
@@ -163,7 +200,13 @@ class QMRIData(MRData):
         -------
             rho tensor
         """
-        return self._rho
+        if self._shape is None and self._rho is None:
+            raise Exception(
+                'At least one parameter (e.g. rho) of QMRIData has to be set.')
+        elif self._rho is None:
+            return (torch.FloatTensor(self._shape)*self._rho_default_value)
+        else:
+            return self._rho
 
     @rho.setter
     def rho(self, value: torch.FloatTensor) -> None:
@@ -173,4 +216,5 @@ class QMRIData(MRData):
         -------
             None
         """
+        self.shape = value.shape
         self._rho = value
