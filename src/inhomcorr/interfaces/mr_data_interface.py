@@ -1,4 +1,5 @@
 """MRData Interface."""
+import numpy as np
 import torch
 
 
@@ -91,6 +92,22 @@ class ImageData(MRData):
             None
         """
         self._data = value
+
+    @property
+    def numpy(self) -> np.ndarray | None:
+        """Get the data as numpy array.
+
+        The function forces the conversion to cpu and detaches
+        from autograd.
+
+        Returns
+        -------
+            numpy nd array or None
+        """
+        if self._data is None:
+            return None
+
+        return self._data.numpy(force=True)
 
     @property
     def shape(self) -> tuple | None:
