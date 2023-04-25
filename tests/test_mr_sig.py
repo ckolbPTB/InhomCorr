@@ -4,20 +4,20 @@ import unittest
 from testdata import TestData
 
 from inhomcorr.interfaces.mr_data_interface import ImageData
-from inhomcorr.mrsig.flash_t1 import MRSigFlashT1
+from inhomcorr.mrsig.flash import MRSigFlash
 
 
-class TestMRSigFlashT1(unittest.TestCase):
+class TestMRSigFlash(unittest.TestCase):
 
-    def SetUp(self):
+    def setUp(self):
         testdata = TestData()
         self.dim = testdata.dim
         self.qmri = testdata.get_random_qmri()
-        self.param = testdata.get_mr_param_t1()
+        self.param = testdata.get_mr_param_gre()
 
-    def test_mr_sig_flash_t1(self):
+    def test_mr_sig_flash(self):
 
-        mrsig = MRSigFlashT1()
+        mrsig = MRSigFlash()
         img = mrsig(self.qmri, self.param)
 
         # Test shape and dtype
