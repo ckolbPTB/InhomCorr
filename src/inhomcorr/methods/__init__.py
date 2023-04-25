@@ -1,2 +1,2 @@
-from .biasfield_estimators import N4Estimator
-from .biasfield_estimators import N4Hyperparameters
+from .n4_biasfield_estimator import N4Estimator
+from .n4_biasfield_estimator import N4Hyperparameters
