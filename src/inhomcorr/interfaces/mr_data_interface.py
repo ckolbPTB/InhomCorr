@@ -39,6 +39,43 @@ class ImageData(MRData):
         super().__init__()
         self._data: torch.FloatTensor | None = None
 
+    @property
+    def data(self) -> torch.FloatTensor | None:
+        """Getter for data.
+
+        Returns
+        -------
+            torch.FloatTensor
+        """
+        return self._data
+
+    @data.setter
+    def data(self, value: torch.FloatTensor):
+        """Setter for data.
+
+        Parameters
+        ----------
+        value
+            torch.FloatTensor
+
+        Returns
+        -------
+            None
+        """
+        self._data = value
+
+    @property
+    def shape(self) -> tuple | None:
+        """Getter for shape of data.
+
+        Returns
+        -------
+            Shape of _data tensor or None.
+        """
+        if self._data is None:
+            return None
+        return self._data.shape
+
 
 class QMRIData(MRData):
     """QMRI Data Class."""
