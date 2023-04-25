@@ -4,8 +4,7 @@ import unittest
 import torch
 
 from inhomcorr.interfaces.mr_data_interface import ImageData
-
-from .testdata import TestData
+from tests.testdata import TestData
 
 
 class TestImageData(unittest.TestCase):
@@ -22,7 +21,7 @@ class TestImageData(unittest.TestCase):
     def test_set_mask(self):
         dummy = ImageData()
         dummy_mask = torch.randint(1, self.shape)
-        dummy.mask = torch.IntTensor(dummy_mask)
+        dummy.mask = dummy_mask
         torch.testing.assert_close(dummy.mask, dummy_mask)
 
     def test_set_header(self):

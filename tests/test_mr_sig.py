@@ -1,10 +1,9 @@
 """Tests of mr signal T1 object."""
 import unittest
 
-from testdata import TestData
-
 from inhomcorr.interfaces.mr_data_interface import ImageData
 from inhomcorr.mrsig.flash import MRSigFlash
+from tests.testdata import TestData
 
 
 class TestMRSigFlash(unittest.TestCase):
