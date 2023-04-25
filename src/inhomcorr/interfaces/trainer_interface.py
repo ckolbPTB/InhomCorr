@@ -3,8 +3,8 @@ from abc import ABC
 from abc import abstractmethod
 from typing import Any
 
-from inhomcorr.interfaces import BiasEstimator
-from inhomcorr.interfaces import BiasFieldDataset
+from .bias_estimator_interface import BiasEstimator
+from .dataset_interface import BiasFieldDataset
 
 
 class TrainingParameters(ABC):
