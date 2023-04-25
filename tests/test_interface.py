@@ -1,30 +1,18 @@
-import pytest
+import unittest
+
 import torch
 
 import inhomcorr.interfaces.mr_data_interface as interface
 
 
-@pytest.fixture
-def numPixels():
-    return 16
+class TestImageData(unittest.TestCase):
 
+    def getRandom2DData(self):
+        self.numPixels = 16
+        self.dataShape = (1, 1, self.numPixels, self.numPixels)
+        return torch.rand(self.dataShape)
 
-@pytest.fixture
-def image2DSize(numPixels):
-    return (1, 1, numPixels, numPixels)
-
-
-@pytest.fixture
-def data2D(image2DSize):
-    return torch.rand(image2DSize)
-
-
-@pytest.fixture
-def image2D(data2D):
-    img = interface.ImageData()
-    img.data = data2D
-    return img
-
-
-def test_mr_image_shape(image2D, image2DSize):
-    assert image2D.shape == image2DSize
+    def test_2Dshape(self):
+        dummy = interface.ImageData()
+        dummy.data = self.getRandom2DData()
+        self.assertEqual(dummy.shape, self.dataShape)
