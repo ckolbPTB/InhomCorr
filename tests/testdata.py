@@ -2,7 +2,7 @@
 import torch
 
 from inhomcorr.interfaces.mr_data_interface import QMRIData
-from inhomcorr.mrsig.flash_t1 import MRParamT1
+from inhomcorr.mrsig.flash import MRParamGRE
 
 
 class TestData:
@@ -11,9 +11,8 @@ class TestData:
     def __init__(self, dim: tuple = (1, 1, 8, 8)) -> None:
         self.dim = dim
 
-    def get_mr_param_t1(self,
-                        tr: float = 100e-3,
-                        alpha: int = 35) -> MRParamT1:
+    def get_mr_param_gre(self, tr: float = 100e-3,
+                         alpha: int = 35) -> MRParamGRE:
         """Get an MRParamT1 Object for Testing.
 
         Parameters
@@ -27,12 +26,12 @@ class TestData:
         -------
             MR T1 parameter object
         """
-        return MRParamT1(
+        return MRParamGRE(
             tr=tr,
             alpha=alpha,
         )
 
-    def get_random_qmri(self, dim: tuple) -> QMRIData:
+    def get_random_qmri(self) -> QMRIData:
         """Generate a QMRI Object.
 
         Parameters
@@ -49,7 +48,7 @@ class TestData:
         qmri.rho = torch.rand(self.dim, dtype=torch.float)
         return qmri
 
-    def get_random_tensor(self) -> torch.FloatTensor:
+    def get_random_tensor(self) -> torch.Tensor:
         """Creates a random float tensor.
 
         Returns

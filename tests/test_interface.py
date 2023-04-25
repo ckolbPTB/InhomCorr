@@ -8,7 +8,7 @@ import inhomcorr.interfaces.mr_data_interface as interface
 
 class TestImageData(unittest.TestCase):
 
-    def SetUp(self):
+    def setUp(self):
         self.data = TestData()
 
     def test_2D_shape(self):
