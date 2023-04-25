@@ -27,4 +27,6 @@ class TestN4Estimator(unittest.TestCase):
         bfe = methods.N4Estimator(hparams=None)
         bf = bfe(testImage)
 
-        assert bf.shape == testImage.shape
+        assert bf.shape == testImage.shape,\
+            'The shapes of biasfield and image should match.'\
+            f'You have {bf.shape} and {testImage.shape}'

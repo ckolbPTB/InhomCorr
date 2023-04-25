@@ -101,6 +101,29 @@ class N4Estimator(BiasEstimator):
         """
         return self.sitk_n4_estimation(image)
 
+    def format_input_data(self, image: ImageData) -> sitk.Image:
+        """Extract data from image and put into sitk.Image.
+
+        Parameters
+        ----------
+        image
+            ImageData containting image
+
+        Returns
+        -------
+            sitk.Image
+        """
+        data = image.numpy
+
+        if data is None:
+            sitk.GetImageFromArray(np.ndarray([]))
+
+        data = np.squeeze(data)
+        assert data.ndim < 4 and data.ndim > 1,\
+            f'Your data must be 3D or 2D. You gave {data.ndim}'
+
+        return sitk.GetImageFromArray(data)
+
     def sitk_n4_estimation(self, image: ImageData) -> ImageData:
         """Estimate the bias field from iamge using the N4 method of SITK.
 
@@ -113,15 +136,8 @@ class N4Estimator(BiasEstimator):
         -------
             Biasfield
         """
-        data = image.numpy
-        if data is None:
-            return ImageData()
+        sitk_img = self.format_input_data(image)
 
-        data = np.squeeze(data)
-        assert data.ndim < 4 and data.ndim > 1,\
-            f'Your data must be 3D or 2D. You gave {data.ndim}'
-
-        sitk_img = sitk.GetImageFromArray(data)
         maskImage = sitk.OtsuThreshold(sitk_img, 0, 1, 200)
         corrector = sitk.N4BiasFieldCorrectionImageFilter()
 
@@ -129,10 +145,13 @@ class N4Estimator(BiasEstimator):
             [self.hparams.maxNumberIterations] * self.hparams.numFittingLevels)
         corrector.Execute(sitk_img, maskImage)
 
-        log_bias_field = corrector.GetLogBiasFieldAsImage(sitk_img)
-        biasfield = sitk.GetArrayFromImage(log_bias_field)
-        biasfield = np.exp(biasfield)
+        logbiasfield = corrector.GetLogBiasFieldAsImage(sitk_img)
+        logbiasfield = sitk.GetArrayFromImage(logbiasfield)
+        biasfield = np.exp(logbiasfield)
         biasfield = torch.FloatTensor(biasfield)
+
+        while biasfield.ndim < 4:
+            biasfield = torch.unsqueeze(biasfield, 0)
 
         biasfield_img = ImageData()
         biasfield_img.data = biasfield
