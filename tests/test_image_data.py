@@ -3,7 +3,7 @@ import unittest
 
 import torch
 
-from inhomcorr.interfaces.mr_data_interface import ImageData
+from inhomcorr.interfaces import ImageData
 from tests.testdata import TestData
 
 
