@@ -113,7 +113,15 @@ class N4Estimator(BiasEstimator):
         -------
             Biasfield
         """
-        sitk_img = sitk.GetImageFromArray(image.numpy)
+        data = image.numpy
+        if data is None:
+            return ImageData()
+
+        data = np.squeeze(data)
+        assert data.ndim < 4 and data.ndim > 1,\
+            f'Your data must be 3D or 2D. You gave {data.ndim}'
+
+        sitk_img = sitk.GetImageFromArray(data)
         maskImage = sitk.OtsuThreshold(sitk_img, 0, 1, 200)
         corrector = sitk.N4BiasFieldCorrectionImageFilter()
 
