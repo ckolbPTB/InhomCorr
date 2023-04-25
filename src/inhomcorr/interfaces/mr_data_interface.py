@@ -1,4 +1,5 @@
 """File: mr_data_interfaces.py."""
+import numpy as np
 import torch
 
 
@@ -38,6 +39,59 @@ class ImageData(MRData):
     def __init__(self) -> None:
         super().__init__()
         self._data: torch.FloatTensor | None = None
+
+    @property
+    def data(self) -> torch.FloatTensor | None:
+        """Getter for data.
+
+        Returns
+        -------
+            torch.FloatTensor
+        """
+        return self._data
+
+    @data.setter
+    def data(self, value: torch.FloatTensor):
+        """Setter for data.
+
+        Parameters
+        ----------
+        value
+            torch.FloatTensor
+
+        Returns
+        -------
+            None
+        """
+        self._data = value
+
+    @property
+    def numpy(self) -> np.ndarray | None:
+        """Get the data as numpy array.
+
+        The function forces the conversion to cpu and detaches
+        from autograd.
+
+        Returns
+        -------
+            numpy nd array or None
+        """
+        if self._data is None:
+            return None
+
+        return self._data.numpy(force=True)
+
+    @property
+    def shape(self) -> tuple | None:
+        """Getter for shape of data.
+
+        Returns
+        -------
+            Shape of _data tensor or None.
+        """
+        if self._data is None:
+            return None
+        return self._data.shape
 
 
 class QMRIData(MRData):
