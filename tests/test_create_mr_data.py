@@ -4,7 +4,7 @@ import unittest
 import nibabel as nib
 import numpy as np
 
-# from inhomcorr.data_loading.create_qmri import get_hdr_from_nii_file
+from inhomcorr.data_loading.create_qmri import get_hdr_from_nii_file
 from inhomcorr.data_loading.create_qmri import get_m0_from_nii_file
 from inhomcorr.data_loading.create_qmri import get_qpar_from_nii_file
 from inhomcorr.data_loading.create_qmri import get_t1_from_nii_file
@@ -22,7 +22,10 @@ class TestCreateQMRIData(unittest.TestCase):
         nifti_im.header['descrip'] = 'testing'
         nib.save(nifti_im, tmp_path + '/test_nii_2378580.nii')
 
-        # nii_hdr = get_hdr_from_nii_file(tmp_path + '/test_nii_2378580.nii')
+        # Get header and verify
+        nii_hdr = dict(get_hdr_from_nii_file(
+            tmp_path + '/test_nii_2378580.nii'))
+        self.assertEqual(nii_hdr['descrip'], nifti_im.header['descrip'])
 
         # Delete folder and content
         os.remove(tmp_path + '/test_nii_2378580.nii')

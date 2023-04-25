@@ -9,9 +9,9 @@ import torch
 from inhomcorr.interfaces.mr_data_interface import QMRIData
 
 
-# typing.Dict[str, typing.Any]:
-def get_hdr_from_nii_file(nii_file_name: str | Path) -> typing.Any:
-    """Get header from nifti file and return it as a dictionary.
+def get_hdr_from_nii_file(nii_file_name: str | Path
+                          ) -> nib.nifti1.Nifti1Header:
+    """Get header from nifti file and return it.
 
     Parameters
     ----------
@@ -19,7 +19,7 @@ def get_hdr_from_nii_file(nii_file_name: str | Path) -> typing.Any:
 
     Returns
     -------
-        typing.Any: Nifti header as a dictionary
+        typing.Any: Nifti header
     """
     # Read in nii file
     nii_file = nib.load(nii_file_name)
@@ -108,6 +108,49 @@ def create_qmri_from_nii_file(nii_file_name: str | Path) -> QMRIData:
     qmri_data.rho = torch.FloatTensor(rho)
 
     # Add nifti header
-    # qmri_data.header = get_hdr_from_nii_file(nii_file_name)
+    qmri_data.header = dict(get_hdr_from_nii_file(nii_file_name))
 
     return (qmri_data)
+
+
+def create_qmri_from_folder(nii_folder: Path) -> typing.List[QMRIData]:
+    """Create list of QMRIData objects based on folder.
+
+    Parameters
+    ----------
+        nii_folder (Path): Folder with nifti files
+
+    Returns
+    -------
+        typing.List[QMRIData]: List of QMRIData objects
+    """
+    # Get all nifti files
+    nii_file_list = nii_folder.glob('*.nii')
+
+    # Create QMRIData
+    qmri_data_list = []
+    for nii_file in nii_file_list:
+        qmri_data_list.append(create_qmri_from_nii_file(nii_file))
+
+    return (qmri_data_list)
+
+
+def create_qmri_hackathon() -> typing.List[QMRIData]:
+    """Create list of QMRIData objects for hackathon.
+
+    Returns
+    -------
+        typing.List[QMRIData]: List of QMRIData objects
+    """
+    # Define folders
+    folder_nii_list = []
+    folder_nii_list.append(
+        '/Users/kolbit01/Documents/PTB/Data/Hackathon_InHomCorr/heart/t1')
+    folder_nii_list.append(
+        '/Users/kolbit01/Documents/PTB/Data/Hackathon_InHomCorr/liver/t1')
+
+    qmri_data_list = []
+    for folder_nii in folder_nii_list:
+        qmri_data_list.extend(create_qmri_from_folder(Path(folder_nii)))
+
+    return qmri_data_list
