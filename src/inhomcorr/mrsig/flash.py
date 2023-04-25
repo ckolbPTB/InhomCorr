@@ -59,6 +59,6 @@ class MRSigFlash(MRSig):
 
         # save the GRE image in ImageData and return it
         gre_id = ImageData()
-        gre_id.data = torch.tensor(greimage, dtype=torch.float)
+        gre_id.data = torch.FloatTensor(greimage)
 
         return gre_id
