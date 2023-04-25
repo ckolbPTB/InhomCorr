@@ -116,7 +116,7 @@ class N4Estimator(BiasEstimator):
         data = image.numpy
 
         if data is None:
-            sitk.GetImageFromArray(np.ndarray([]))
+            return sitk.GetImageFromArray(np.ndarray([]))
 
         data = np.squeeze(data)
         assert data.ndim < 4 and data.ndim > 1,\
