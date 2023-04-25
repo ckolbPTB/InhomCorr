@@ -1,4 +1,5 @@
 """File: mr_data_interfaces.py."""
+import numpy as np
 import torch
 
 
@@ -19,6 +20,21 @@ class MRData():
         """
         return self._header
 
+    @header.setter
+    def header(self, value: dict):
+        """Setter for header.
+
+        Parameters
+        ----------
+        value
+            dictionary
+
+        Returns
+        -------
+            None
+        """
+        self._header = value
+
     @property
     def mask(self) -> torch.IntTensor | None:
         """Mask getter function.
@@ -29,7 +45,20 @@ class MRData():
         """
         return self._mask
 
-    # TODO: Implementation of setter functions
+    @mask.setter
+    def mask(self, value: torch.IntTensor):
+        """Setter for mask.
+
+        Parameters
+        ----------
+        value
+            torch.IntTensor
+
+        Returns
+        -------
+            None
+        """
+        self._mask = value
 
 
 class ImageData(MRData):
@@ -65,6 +94,22 @@ class ImageData(MRData):
         self._data = value
 
     @property
+    def numpy(self) -> np.ndarray | None:
+        """Get the data as numpy array.
+
+        The function forces the conversion to cpu and detaches
+        from autograd.
+
+        Returns
+        -------
+            numpy nd array or None
+        """
+        if self._data is None:
+            return None
+
+        return self._data.numpy(force=True)
+
+    @property
     def shape(self) -> tuple | None:
         """Getter for shape of data.
 
@@ -90,7 +135,7 @@ class QMRIData(MRData):
         # self._db0: torch.Tensor[torch.float] | None = None
 
     @property
-    def t1(self) -> torch.FloatTensor:
+    def t1(self) -> torch.FloatTensor | None:
         """Getter of T1 map.
 
         Returns
@@ -111,7 +156,7 @@ class QMRIData(MRData):
         self._t1 = value
 
     @property
-    def rho(self) -> torch.FloatTensor:
+    def rho(self) -> torch.FloatTensor | None:
         """Getter of rho.
 
         Returns

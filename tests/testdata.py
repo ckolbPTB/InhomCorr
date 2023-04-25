@@ -8,8 +8,8 @@ from inhomcorr.mrsig.flash import MRParamGRE
 class TestData:
     """TestData."""
 
-    def __init__(self, dim: tuple = (1, 1, 8, 8)) -> None:
-        self.dim = dim
+    def __init__(self, shape: tuple = (1, 1, 8, 8)) -> None:
+        self.shape = shape
 
     def get_mr_param_gre(self, tr: float = 100e-3,
                          alpha: int = 35) -> MRParamGRE:
@@ -44,8 +44,8 @@ class TestData:
             QMRI data object
         """
         qmri = QMRIData()
-        qmri.t1 = torch.rand(self.dim, dtype=torch.float)
-        qmri.rho = torch.rand(self.dim, dtype=torch.float)
+        qmri.t1 = torch.rand(self.shape, dtype=torch.float)
+        qmri.rho = torch.rand(self.shape, dtype=torch.float)
         return qmri
 
     def get_random_tensor(self) -> torch.Tensor:
@@ -55,4 +55,4 @@ class TestData:
         -------
             Random tensor
         """
-        return torch.rand(self.dim, dtype=torch.float)
+        return torch.rand(self.shape, dtype=torch.float)
