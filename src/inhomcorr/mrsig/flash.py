@@ -12,12 +12,16 @@ from inhomcorr.interfaces import QMRIData
 
 @dataclass
 class MRParamGRE(MRParam):
-    """MRParamGRE _summary_.
+    """Parameters for GRE.
 
     Parameters
     ----------
-    MRParam
-        _description_
+    tr
+        tr in s
+    te
+        te in s
+    alpha
+        flipangle in radian
     """
 
     tr: float = 0.0    # in s
@@ -26,31 +30,35 @@ class MRParamGRE(MRParam):
 
 
 class MRSigFlash(MRSig):
-    """Flash MR Sig Interface."""
+    """Flash Simulator"""
 
     def __init__(self, with_t2s: bool = False) -> None:
-        """Init."""
-        super().__init__()
-        self.with_t2s = with_t2s  # False: GRE signal without T2 star
+        """Flash Simulator
+        
+        Parameters
+        ----------
+        with_t2s
+            include T2* in simulation
+       """
+        self.with_t2s = with_t2s
 
     def __call__(self, qmap: QMRIData, param: MRParamGRE) -> ImageData:
-        """__call__ _summary_.
+        """Simulates an acquisition.
 
         Parameters
         ----------
         qmap
-            _description_
+           quantitative maps. T1 and rho will be used.
         param
-            _description_
+            Sequence Parameters
 
         Returns
         -------
-            _description_
+            The image
         """
-        # define GRE steady state signal equation
         if qmap.t1 is None:
             raise AttributeError('T1 map not defined')
-
+        # define GRE steady state signal equation
         e1 = torch.exp(-param.tr / qmap.t1)
         greimage = qmap.rho * (1-e1) * torch.sin(torch.tensor(param.alpha)) / \
             (1 - torch.cos(torch.tensor(param.alpha)) * e1)
