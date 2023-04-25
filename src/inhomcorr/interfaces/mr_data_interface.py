@@ -33,7 +33,7 @@ class MRData():
 
 
 class ImageData(MRData):
-    """MR Data Class for Quantitative Data."""
+    """Image Data Class."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -41,7 +41,7 @@ class ImageData(MRData):
 
 
 class QMRIData(MRData):
-    """Image Data Class for Image Data."""
+    """QMRI Data Class."""
 
     def __init__(self) -> None:
         super().__init__()
