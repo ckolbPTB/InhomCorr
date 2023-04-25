@@ -1,6 +1,6 @@
 """flash_t1.py."""
 
-import math
+from dataclasses import dataclass
 
 import torch
 
@@ -10,6 +10,7 @@ from inhomcorr.interfaces import MRSig
 from inhomcorr.interfaces import QMRIData
 
 
+@dataclass
 class MRParamGRE(MRParam):
     """MRParamGRE _summary_.
 
@@ -46,12 +47,10 @@ class MRSigFlash(MRSig):
         -------
             _description_
         """
-        greimage = torch.tensor()
-
         # define GRE steady state signal equation
-        e1 = math.exp(-param.tr / qmap.t1)
-        greimage = qmap.rho * (1-e1) * math.sin(param.alpha) / \
-            (1-math.cos(param.alpha * e1))
+        e1 = torch.exp(-param.tr / qmap.t1)
+        greimage = qmap.rho * (1-e1) * torch.sin(torch.tensor(param.alpha)) / \
+            (1 - torch.cos(torch.tensor(param.alpha)) * e1)
 
         if self.with_t2s:
             pass
@@ -60,6 +59,6 @@ class MRSigFlash(MRSig):
 
         # save the GRE image in ImageData and return it
         gre_id = ImageData()
-        gre_id.data = greimage
+        gre_id.data = torch.tensor(greimage, dtype=torch.float)
 
         return gre_id
