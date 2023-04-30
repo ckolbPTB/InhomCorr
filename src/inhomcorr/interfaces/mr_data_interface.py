@@ -9,7 +9,7 @@ class MRData():
     def __init__(self) -> None:
         self._header: dict = {}
         self._mask: torch.Tensor | None = None
-        self._shape: torch.Size | None = None
+        self._shape: list[int] | None = None
 
     @property
     def header(self) -> dict:
@@ -69,7 +69,7 @@ class MRData():
         self._mask = value
 
     @property
-    def shape(self) -> tuple | None:
+    def shape(self) -> list[int] | None:
         """Getter for shape of tensors.
 
         Returns
@@ -79,7 +79,7 @@ class MRData():
         return self._shape
 
     @shape.setter
-    def shape(self, value: torch.Size):
+    def shape(self, value: list):
         """Setter for shape.
 
         Parameters
@@ -130,7 +130,7 @@ class ImageData(MRData):
         -------
             None
         """
-        self.shape = value.shape
+        self.shape = list(value.shape)
         self._data = value
 
     @property
@@ -156,9 +156,9 @@ class QMRIData(MRData):
     def __init__(self) -> None:
         super().__init__()
         self._t1: torch.Tensor | None = None
-        self._t1_default_value: torch.Tensor = torch.inf
+        self._t1_default_value: torch.Tensor = torch.Tensor(torch.inf)
         self._rho: torch.Tensor | None = None
-        self._rho_default_value: torch.Tensor = 0.0
+        self._rho_default_value: torch.Tensor = torch.Tensor(0.0)
 
         # To be added in the future
         # self._t2: torch.Tensor[torch.float] | None = None
@@ -176,7 +176,10 @@ class QMRIData(MRData):
             raise Exception(
                 'At least one parameter (e.g. t1) of QMRIData has to be set.')
         elif self._t1 is None:
-            return (torch.FloatTensor(self._shape)*self._t1_default_value)
+            # TODO FIX THIS MESS
+            assert isinstance(self._shape, list)
+            return (torch.ones(self._shape, dtype=torch.float) *
+                    self._t1_default_value)
         else:
             return self._t1
 
@@ -189,7 +192,7 @@ class QMRIData(MRData):
         var
             T1 map tensor
         """
-        self.shape = value.shape
+        self.shape = list(value.shape)
         self._t1 = value
 
     @property
@@ -204,7 +207,10 @@ class QMRIData(MRData):
             raise Exception(
                 'At least one parameter (e.g. rho) of QMRIData has to be set.')
         elif self._rho is None:
-            return (torch.FloatTensor(self._shape)*self._rho_default_value)
+            # TODO FIX THIS MESS
+            assert isinstance(self._shape, list)
+            return (torch.ones(self._shape, dtype=torch.float) *
+                    self._rho_default_value)
         else:
             return self._rho
 
@@ -216,5 +222,5 @@ class QMRIData(MRData):
         -------
             None
         """
-        self.shape = value.shape
+        self.shape = list(value.shape)
         self._rho = value
