@@ -18,29 +18,12 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-  "numpy",
-  "torch"
-]
+dependencies = ["numpy", "torch", "torchio"]
 
 [project.optional-dependencies]
-test = [
-  "coverage",
-  "codecov",
-  "pre-commit"
-]
-lint = [
-  "mypy",
-  "flake8",
-  "isort",
-  "pre-commit",
-  "autopep8",
-  "pydocstyle"
-]
-docs = [
-  "sphinx",
-  "sphinx_rtd_theme",
-]
+test = ["coverage", "codecov", "pre-commit"]
+lint = ["mypy", "flake8", "isort", "pre-commit", "autopep8", "pydocstyle"]
+docs = ["sphinx", "sphinx_rtd_theme"]
 
 [project.urls]
 "repository" = "https://github.com/ckolbPTB/InhomCorr"
