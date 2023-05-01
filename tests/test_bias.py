@@ -19,7 +19,7 @@ class TestBiasCreationTorchio(unittest.TestCase):
         bf = bf_creator.get_bias_field(self.image)
 
         # Test shape and dtype
-        self.assertEqual(self.shape, list(bf.shape))
+        self.assertEqual(list(self.shape), list(bf.shape))
         self.assertIsInstance(bf, ImageData)
 
     def test_random_bias_creation_torchio(self):
