@@ -1,10 +1,27 @@
 """Implementation of a UNet."""
 
-import numpy as np
+from dataclasses import dataclass
+
 import torch
 import torch.nn as nn
 
 from inhomcorr.interfaces.bias_estimator_interface import HyperParameters
+
+
+@dataclass
+class UNetHyperParameters(HyperParameters):
+    """Hyperparameters for the UNet Estimator."""
+
+    dim: torch.int = 2
+    nChIn: torch.int = 2
+    nChOut: torch.int = 2
+    ActivationFun: torch.nn = torch.nn.LeakyReLU()
+    KernelSize: torch.int = 3
+    nEncStages: torch.int = 3
+    nConvsPerStage: torch.int = 2
+    nFilters: torch.int = 16
+    ConvBlockResConnection: torch.bool = True
+    Bias: torch.bool = True
 
 
 class ConvBlock(nn.Module):
@@ -16,9 +33,13 @@ class ConvBlock(nn.Module):
             n_ch_in,
             n_ch_out,
             n_convs,
+            activate_fun,
+            conv_block_res_connection,
             kernel_size=3,
-            bias=False):
-        super(ConvBlock, self).__init__()
+            bias=True):
+        super().__init__()
+
+        self.conv_block_res_connection = conv_block_res_connection
 
         if dim == 1:
             conv_op = nn.Conv1d
@@ -27,7 +48,7 @@ class ConvBlock(nn.Module):
         elif dim == 3:
             conv_op = nn.Conv3d
 
-        padding = int(np.floor(kernel_size / 2))
+        padding = 'same'
 
         conv_block_list = []
         conv_block_list.extend([conv_op(n_ch_in,
@@ -35,14 +56,18 @@ class ConvBlock(nn.Module):
                                         kernel_size,
                                         padding=padding,
                                         bias=bias),
-                                nn.LeakyReLU()])
+                                activate_fun])
 
         for i in range(n_convs - 1):
             conv_block_list.extend([conv_op(
                 n_ch_out, n_ch_out, kernel_size, padding=padding, bias=bias),
-                nn.LeakyReLU()])
+                activate_fun])
 
         self.conv_block = nn.Sequential(*conv_block_list)
+
+        if conv_block_res_connection:
+            self.reslayer = conv_op(
+                n_ch_in, n_ch_out, kernel_size, padding=padding, bias=bias)
 
     def forward(self, x):
         """Forward pass of the convolutional block.
@@ -56,7 +81,10 @@ class ConvBlock(nn.Module):
         -------
             _description_
         """
-        return self.conv_block(x)
+        if self.conv_block_res_connection:
+            return self.conv_block(x) + self.reslayer(x)
+        else:
+            return self.conv_block(x)
 
 
 class Encoder(nn.Module):
@@ -69,9 +97,11 @@ class Encoder(nn.Module):
             n_enc_stages,
             n_convs_per_stage,
             n_filters,
+            activation_fun,
+            conv_block_res_connection,
             kernel_size=3,
-            bias=False):
-        super(Encoder, self).__init__()
+            bias=True):
+        super().__init__()
 
         n_ch_list = [n_ch_in]
         for ne in range(n_enc_stages):
@@ -81,6 +111,8 @@ class Encoder(nn.Module):
                                                    n_ch_list[i],
                                                    n_ch_list[i + 1],
                                                    n_convs_per_stage,
+                                                   activation_fun,
+                                                   conv_block_res_connection,
                                                    kernel_size=kernel_size)
                                          for i in range(len(n_ch_list) - 1)])
 
@@ -123,6 +155,8 @@ class Decoder(nn.Module):
             n_dec_stages,
             n_convs_per_stage,
             n_filters,
+            activation_fun,
+            conv_block_res_connection,
             kernel_size=3,
             bias=False):
         super(Decoder, self).__init__()
@@ -143,7 +177,7 @@ class Decoder(nn.Module):
 
         self.interp_mode = interp_mode
 
-        padding = int(np.floor(kernel_size / 2))
+        padding = 'same'
         self.upconvs = nn.ModuleList([conv_op(n_ch_list[i],
                                               n_ch_list[i + 1],
                                               kernel_size=kernel_size,
@@ -154,6 +188,8 @@ class Decoder(nn.Module):
                                                    n_ch_list[i],
                                                    n_ch_list[i + 1],
                                                    n_convs_per_stage,
+                                                   activation_fun,
+                                                   conv_block_res_connection,
                                                    kernel_size=kernel_size,
                                                    bias=bias)
                                          for i in range(len(n_ch_list) - 1)])
@@ -175,7 +211,7 @@ class Decoder(nn.Module):
 class UNet(nn.Module):
     """UNet model."""
 
-    def __init__(self, hparams: HyperParameters):
+    def __init__(self, hparams: UNetHyperParameters):
         super(UNet, self).__init__()
 
         self.encoder = Encoder(hparams.dim,
@@ -183,6 +219,8 @@ class UNet(nn.Module):
                                hparams.nEncStages,
                                hparams.nConvsPerStage,
                                hparams.nFilters,
+                               hparams.ActivationFun,
+                               hparams.ConvBlockResConnection,
                                hparams.KernelSize,
                                hparams.Bias)
         self.decoder = Decoder(hparams.dim,
@@ -191,6 +229,8 @@ class UNet(nn.Module):
                                hparams.nEncStages,
                                hparams.nConvsPerStage,
                                hparams.nFilters * (hparams.nEncStages * 2),
+                               hparams.ActivationFun,
+                               hparams.ConvBlockResConnection,
                                kernel_size=hparams.KernelSize,
                                bias=hparams.Bias)
 
@@ -204,7 +244,6 @@ class UNet(nn.Module):
         self.c1x1 = conv_op(hparams.nFilters,
                             hparams.nChOut,
                             kernel_size=1, padding=0, bias=hparams.Bias)
-        self.res_connection = hparams.ResConnection
 
     def forward(self, x):
         """Forward pass of the UNet.
@@ -218,11 +257,7 @@ class UNet(nn.Module):
         -------
             _description_
         """
-        if self.res_connection:
-            x_in = x.clone()
         enc_features = self.encoder(x)
         x = self.decoder(enc_features[-1], enc_features[::-1][1:])
         x = self.c1x1(x)
-        if self.res_connection:
-            x = x_in + x
         return x

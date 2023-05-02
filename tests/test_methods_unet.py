@@ -10,6 +10,7 @@ class TestMethodsUnet(unittest.TestCase):
 
     def create_unet(self):
         hparams = UNetHyperParameters()
+        hparams.nConvsPerStage = 3
         u = UNet(hparams)
         return u
 
