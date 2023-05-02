@@ -36,6 +36,7 @@ class MRData():
         """
         self._header = value
 
+    @property
     def shape(self) -> tuple:
         """Getter for shape of data.
 
