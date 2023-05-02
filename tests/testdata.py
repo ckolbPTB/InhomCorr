@@ -1,6 +1,7 @@
 """File containing a test data object."""
 import torch
 
+from inhomcorr.interfaces.mr_data_interface import ImageData
 from inhomcorr.interfaces.mr_data_interface import QMRIData
 from inhomcorr.mrsig.flash import MRParamGRE
 
@@ -34,11 +35,6 @@ class TestData:
     def get_random_qmri(self) -> QMRIData:
         """Generate a QMRI Object.
 
-        Parameters
-        ----------
-        dim
-            dimension of maps
-
         Returns
         -------
             QMRI data object
@@ -48,8 +44,19 @@ class TestData:
         qmri.rho = torch.rand(self.shape, dtype=torch.float)
         return qmri
 
+    def get_random_image(self) -> ImageData:
+        """Generate a Image Object.
+
+        Returns
+        -------
+            Image data object
+        """
+        image = ImageData()
+        image.data = torch.rand(self.shape, dtype=torch.float)
+        return image
+
     def get_random_tensor(self) -> torch.Tensor:
-        """Creates a random float tensor.
+        """Create a random float tensor.
 
         Returns
         -------
