@@ -1,4 +1,4 @@
-"""File: mr_data_interfaces.py."""
+"""MRData Interface."""
 import numpy as np
 import torch
 
@@ -8,7 +8,7 @@ class MRData():
 
     def __init__(self) -> None:
         self._header: dict = {}
-        self._mask: torch.IntTensor | None = None
+        self._mask: torch.Tensor | None = None
 
     @property
     def header(self) -> dict:
@@ -20,8 +20,23 @@ class MRData():
         """
         return self._header
 
+    @header.setter
+    def header(self, value: dict):
+        """Setter for header.
+
+        Parameters
+        ----------
+        value
+            dictionary
+
+        Returns
+        -------
+            None
+        """
+        self._header = value
+
     @property
-    def mask(self) -> torch.IntTensor | None:
+    def mask(self) -> torch.Tensor | None:
         """Mask getter function.
 
         Returns
@@ -30,7 +45,20 @@ class MRData():
         """
         return self._mask
 
-    # TODO: Implementation of setter functions
+    @mask.setter
+    def mask(self, value: torch.Tensor):
+        """Setter for mask.
+
+        Parameters
+        ----------
+        value
+            torch.Tensor
+
+        Returns
+        -------
+            None
+        """
+        self._mask = value
 
 
 class ImageData(MRData):
@@ -38,26 +66,26 @@ class ImageData(MRData):
 
     def __init__(self) -> None:
         super().__init__()
-        self._data: torch.FloatTensor | None = None
+        self._data: torch.Tensor | None = None
 
     @property
-    def data(self) -> torch.FloatTensor | None:
+    def data(self) -> torch.Tensor | None:
         """Getter for data.
 
         Returns
         -------
-            torch.FloatTensor
+            torch.Tensor
         """
         return self._data
 
     @data.setter
-    def data(self, value: torch.FloatTensor):
+    def data(self, value: torch.Tensor):
         """Setter for data.
 
         Parameters
         ----------
         value
-            torch.FloatTensor
+            torch.Tensor
 
         Returns
         -------
@@ -99,15 +127,15 @@ class QMRIData(MRData):
 
     def __init__(self) -> None:
         super().__init__()
-        self._t1: torch.FloatTensor | None = None
-        self._rho: torch.FloatTensor | None = None
+        self._t1: torch.Tensor | None = None
+        self._rho: torch.Tensor | None = None
 
         # To be added in the future
         # self._t2: torch.Tensor[torch.float] | None = None
         # self._db0: torch.Tensor[torch.float] | None = None
 
     @property
-    def t1(self) -> torch.FloatTensor:
+    def t1(self) -> torch.Tensor | None:
         """Getter of T1 map.
 
         Returns
@@ -117,7 +145,7 @@ class QMRIData(MRData):
         return self._t1
 
     @t1.setter
-    def t1(self, value: torch.FloatTensor) -> None:
+    def t1(self, value: torch.Tensor) -> None:
         """Setter for t1.
 
         Parameters
@@ -128,7 +156,7 @@ class QMRIData(MRData):
         self._t1 = value
 
     @property
-    def rho(self) -> torch.FloatTensor:
+    def rho(self) -> torch.Tensor | None:
         """Getter of rho.
 
         Returns
@@ -138,7 +166,7 @@ class QMRIData(MRData):
         return self._rho
 
     @rho.setter
-    def rho(self, value: torch.FloatTensor) -> None:
+    def rho(self, value: torch.Tensor) -> None:
         """Setter of rho.
 
         Returns
