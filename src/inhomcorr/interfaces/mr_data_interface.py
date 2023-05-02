@@ -36,6 +36,15 @@ class MRData():
         """
         self._header = value
 
+    def shape(self) -> tuple:
+        """Getter for shape of data.
+
+        Returns
+        -------
+            Shape of _data tensor or None.
+        """
+        return self._shape
+
     @property
     def mask(self) -> torch.Tensor | None:
         """Mask getter function.
@@ -75,7 +84,8 @@ class ImageData(MRData):
 
     def __init__(self, data: torch.Tensor) -> None:
         super().__init__()
-        self._data = data
+        self._data: torch.Tensor | None = None
+        self.data = data
 
     @property
     def data(self) -> torch.Tensor | None:
@@ -121,17 +131,9 @@ class ImageData(MRData):
         -------
             numpy nd array or None
         """
+        if not self._data:
+            raise AttributeError('Data not defined.')
         return self._data.numpy(force=True)
-
-    @property
-    def shape(self) -> tuple:
-        """Getter for shape of data.
-
-        Returns
-        -------
-            Shape of _data tensor or None.
-        """
-        return self._data.shape
 
 
 class QMRIData(MRData):
