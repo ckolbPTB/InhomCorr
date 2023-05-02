@@ -63,3 +63,29 @@ class TestData:
             Random tensor
         """
         return torch.rand(self.shape, dtype=torch.float)
+
+    def get_test_qmri(self) -> QMRIData:
+        """Generate a QMRI Object.
+
+        Returns
+        -------
+            QMRI data object
+        """
+        qmri = QMRIData()
+        qmri.t1 = torch.tensor(
+            [[1e-3, 1], [1e-3, 1]], dtype=torch.float)
+        qmri.rho = torch.tensor(
+            [[1, 1], [0.1, 0.1]], dtype=torch.float)
+        return qmri
+
+    def get_test_image(self) -> ImageData:
+        """Generate a Image Object.
+
+        Returns
+        -------
+            Image data object
+        """
+        image = ImageData()
+        image.data = torch.tensor(
+            [[-0.4282, -0.0224], [-0.0428, -0.0022]], dtype=torch.float)
+        return image
