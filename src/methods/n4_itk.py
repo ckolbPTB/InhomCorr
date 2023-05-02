@@ -74,8 +74,8 @@ class N4Estimator(BiasEstimator):
         """
         data = image.numpy
 
-        if data is None:
-            return sitk.GetImageFromArray(np.ndarray([]))
+        if data is None:  # TODO: Remove once data is forced not to be None
+            raise RuntimeError('ImageData.data should not be None.')
 
         data = np.squeeze(data)
         assert data.ndim < 4 and data.ndim > 1,\
@@ -109,11 +109,11 @@ class N4Estimator(BiasEstimator):
         logbiasfield = corrector.GetLogBiasFieldAsImage(sitk_img)
         logbiasfield = sitk.GetArrayFromImage(logbiasfield)
         biasfield = np.exp(logbiasfield)
-        biasfield = torch.FloatTensor(biasfield)
+        biasfield = torch.tensor(biasfield)
 
         while biasfield.ndim < 4:
             biasfield = torch.unsqueeze(biasfield, 0)
-
+        # TODO: adjust once we force setting the data in the constructor
         biasfield_img = ImageData()
         biasfield_img.data = biasfield
 
