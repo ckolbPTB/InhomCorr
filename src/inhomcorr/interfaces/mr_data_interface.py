@@ -9,6 +9,7 @@ class MRData():
     def __init__(self) -> None:
         self._header: dict = {}
         self._mask: torch.Tensor | None = None
+        self._shape: tuple[int, int, int, int] = (1, 1, 1, 1)
 
     @property
     def header(self) -> dict:
@@ -58,6 +59,14 @@ class MRData():
         -------
             None
         """
+        try:
+            self._shape = torch.broadcast_shapes(value.shape, self._shape)
+        except RuntimeError:
+            raise RuntimeError(
+                f'Shapes do not match for the parameter map got {value.shape}'
+                'for the parameter which is not broadcastable to current'
+                f'shape {self._shape}'
+            )
         self._mask = value
 
 
@@ -91,10 +100,18 @@ class ImageData(MRData):
         -------
             None
         """
+        try:
+            self._shape = torch.broadcast_shapes(value.shape, self._shape)
+        except RuntimeError:
+            raise RuntimeError(
+                f'Shapes do not match for the parameter map got {value.shape}'
+                'for the parameter which is not broadcastable to current'
+                f'shape {self._shape}'
+            )
         self._data = value
 
     @property
-    def numpy(self) -> np.ndarray | None:
+    def numpy(self) -> np.ndarray:
         """Get the data as numpy array.
 
         The function forces the conversion to cpu and detaches
@@ -104,21 +121,16 @@ class ImageData(MRData):
         -------
             numpy nd array or None
         """
-        if self._data is None:
-            return None
-
         return self._data.numpy(force=True)
 
     @property
-    def shape(self) -> tuple | None:
+    def shape(self) -> tuple:
         """Getter for shape of data.
 
         Returns
         -------
             Shape of _data tensor or None.
         """
-        if self._data is None:
-            return None
         return self._data.shape
 
 
@@ -129,13 +141,17 @@ class QMRIData(MRData):
     """
 
     def __init__(self,
-                 t1: torch.Tensor = None,
-                 rho: torch.Tensor = None) -> None:
+                 t1: torch.Tensor | None = None,
+                 rho: torch.Tensor | None = None) -> None:
         super().__init__()
 
-        # Set default values for t1 map and rho map
-        self._t1 = torch.tensor(float('inf')) if not t1 else t1
-        self._rho = torch.tensor(1) if not rho else rho
+        # Set initial class attributes
+        self._t1: torch.Tensor | None = None
+        self._rho: torch.Tensor | None = None
+
+        # Use setters to set t1 and rho
+        self.t1 = t1
+        self.rho = rho
 
         # To be added in the future
         # self._t2: torch.Tensor[torch.float] | None = None
@@ -149,10 +165,10 @@ class QMRIData(MRData):
         -------
             T1 map tensor [s]
         """
-        return self._t1
+        return torch.broadcast_to(self._t1, self._shape)
 
     @t1.setter
-    def t1(self, value: torch.Tensor) -> None:
+    def t1(self, value: torch.Tensor | None) -> None:
         """Setter for t1.
 
         Parameters
@@ -160,6 +176,16 @@ class QMRIData(MRData):
         value
             T1 map tensor [s]
         """
+        if value is None:
+            value = torch.tensor(float('inf')).reshape((1, 1, 1, 1))
+        try:
+            self._shape = torch.broadcast_shapes(value.shape, self._shape)
+        except RuntimeError:
+            raise RuntimeError(
+                f'Shapes do not match for the parameter map got {value.shape}'
+                'for the parameter which is not broadcastable to current'
+                f'shape {self._shape}'
+            )
         self._t1 = value
 
     @property
@@ -170,7 +196,7 @@ class QMRIData(MRData):
         -------
             rho tensor [au]
         """
-        return self._rho
+        return torch.broadcast_to(self._rho, self._shape)
 
     @rho.setter
     def rho(self, value: torch.Tensor) -> None:
@@ -181,4 +207,15 @@ class QMRIData(MRData):
         value
             Rho map tensor [au]
         """
+        if value is None:
+            # Defaults to (1, 1, 1, 1) Tensor with value 1.
+            value = torch.tensor(1.).reshape((1, 1, 1, 1))
+        try:
+            self._shape = torch.broadcast_shapes(value.shape, self._shape)
+        except RuntimeError:
+            raise RuntimeError(
+                f'Shapes do not match for the parameter map got {value.shape}'
+                'for the parameter which is not broadcastable to current'
+                f'shape {self._shape}'
+            )
         self._rho = value
