@@ -64,9 +64,9 @@ class MRData():
 class ImageData(MRData):
     """Image Data Class."""
 
-    def __init__(self) -> None:
+    def __init__(self, data: torch.Tensor) -> None:
         super().__init__()
-        self._data: torch.Tensor | None = None
+        self._data = data
 
     @property
     def data(self) -> torch.Tensor | None:
@@ -123,24 +123,31 @@ class ImageData(MRData):
 
 
 class QMRIData(MRData):
-    """QMRI Data Class."""
+    """QMRI Data Class.
 
-    def __init__(self) -> None:
+    All data should be given in SI units.
+    """
+
+    def __init__(self,
+                 t1: torch.Tensor = None,
+                 rho: torch.Tensor = None) -> None:
         super().__init__()
-        self._t1: torch.Tensor | None = None
-        self._rho: torch.Tensor | None = None
+
+        # Set default values for t1 map and rho map
+        self._t1 = torch.tensor(float('inf')) if not t1 else t1
+        self._rho = torch.tensor(1) if not rho else rho
 
         # To be added in the future
         # self._t2: torch.Tensor[torch.float] | None = None
         # self._db0: torch.Tensor[torch.float] | None = None
 
     @property
-    def t1(self) -> torch.Tensor | None:
+    def t1(self) -> torch.Tensor:
         """Getter of T1 map.
 
         Returns
         -------
-            T1 map tensor
+            T1 map tensor [s]
         """
         return self._t1
 
@@ -150,18 +157,18 @@ class QMRIData(MRData):
 
         Parameters
         ----------
-        var
-            T1 map tensor
+        value
+            T1 map tensor [s]
         """
         self._t1 = value
 
     @property
-    def rho(self) -> torch.Tensor | None:
+    def rho(self) -> torch.Tensor:
         """Getter of rho.
 
         Returns
         -------
-            rho tensor
+            rho tensor [au]
         """
         return self._rho
 
@@ -169,8 +176,9 @@ class QMRIData(MRData):
     def rho(self, value: torch.Tensor) -> None:
         """Setter of rho.
 
-        Returns
-        -------
-            None
+        Parameters
+        ----------
+        value
+            Rho map tensor [au]
         """
         self._rho = value
