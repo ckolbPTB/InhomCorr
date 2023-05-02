@@ -47,7 +47,7 @@ class BiasCreatorTorchio(BiasCreator):
 
     def get_random_bias_fields(self, image: ImageData,
                                number: int) -> list[ImageData]:
-        """Inferface of a bias field creator provding multiple bias fields.
+        """Inferface of a bias field creator providing multiple bias fields.
 
         Parameters
         ----------

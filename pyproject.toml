@@ -18,7 +18,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-dependencies = ["numpy", "torch", "torchio"]
+dependencies = ["numpy", "torch", "torchio", "nibabel"]
+
 
 [project.optional-dependencies]
 test = ["coverage", "codecov", "pre-commit"]
