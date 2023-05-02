@@ -2,16 +2,15 @@ import unittest
 
 import torch
 
-from inhomcorr.methods.unet import UNet
-from inhomcorr.methods.unet_estimator import UNetHyperParameters
+from inhomcorr.methods.unet import UNetHyperParameters
+from inhomcorr.methods.unet_estimator import UNetEstimator
 
 
 class TestMethodsUnet(unittest.TestCase):
 
     def create_unet(self):
         hparams = UNetHyperParameters()
-        hparams.nConvsPerStage = 3
-        u = UNet(hparams)
+        u = UNetEstimator(hparams)
         return u
 
     def test_apply_unet(self):
