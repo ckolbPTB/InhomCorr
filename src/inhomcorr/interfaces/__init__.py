@@ -1,5 +1,6 @@
 from .mr_data_interface import ImageData as ImageData  # isort:skip
 from .mr_data_interface import QMRIData as QMRIData  # isort:skip
+from .bias_creator_interface import BiasCreator
 from .bias_estimator_interface import BiasEstimator
 from .bias_estimator_interface import HyperParameters
 from .dataset_interface import BiasFieldDataset
