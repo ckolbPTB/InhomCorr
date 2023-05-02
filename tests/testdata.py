@@ -27,10 +27,11 @@ class TestData:
         -------
             MR T1 parameter object
         """
-        return MRParamGRE(
-            tr=tr,
-            alpha=alpha,
-        )
+        mrparamgre = MRParamGRE()
+        mrparamgre.tr = tr
+        mrparamgre.alpha = alpha
+
+        return mrparamgre
 
     def get_random_qmri(self) -> QMRIData:
         """Generate a QMRI Object.
