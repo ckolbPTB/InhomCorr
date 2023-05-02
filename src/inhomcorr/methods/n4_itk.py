@@ -114,7 +114,6 @@ class N4Estimator(BiasEstimator):
         while biasfield.ndim < 4:
             biasfield = torch.unsqueeze(biasfield, 0)
         # TODO: adjust once we force setting the data in the constructor
-        biasfield_img = ImageData()
-        biasfield_img.data = biasfield
+        biasfield_img = ImageData(biasfield)
 
         return biasfield_img
