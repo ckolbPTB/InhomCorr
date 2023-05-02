@@ -9,7 +9,9 @@ from inhomcorr.mrsig.flash import MRParamGRE
 class TestData:
     """TestData."""
 
-    def __init__(self, shape: tuple = (1, 1, 8, 8)) -> None:
+    def __init__(self,
+                 shape: tuple[int, int, int, int] = (1, 1, 8, 8)
+                 ) -> None:
         self.shape = shape
 
     def get_mr_param_gre(self, tr: float = 100e-3,
