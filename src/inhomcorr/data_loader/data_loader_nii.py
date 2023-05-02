@@ -67,7 +67,6 @@ class QMRIDataLoaderNii(QMRIDataLoader):
         qmri_data.t1 = torch.moveaxis(qmri_data.t1, (0, 1, 2), (2, 1, 0))
 
         # Calculate rho from m0
-        # Get m0
         m0 = nii_data[:, :, :, 0]
 
         # Calculate mask
@@ -76,7 +75,7 @@ class QMRIDataLoaderNii(QMRIDataLoader):
         rho[m0 > 0.02] = 1
 
         rho = ndi.morphology.binary_opening(
-            rho.astype(int), np.ones((2, 2)).astype(int), iterations=10)
+            rho.astype(int), np.ones((2, 2, 2)).astype(int), iterations=10)
 
         # Add rho
         qmri_data.rho = torch.FloatTensor(rho)
