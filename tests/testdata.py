@@ -51,8 +51,7 @@ class TestData:
         -------
             Image data object
         """
-        image = ImageData()
-        image.data = torch.rand(self.shape, dtype=torch.float)
+        image = ImageData(torch.rand(self.shape, dtype=torch.float))
         return image
 
     def get_random_tensor(self) -> torch.Tensor:

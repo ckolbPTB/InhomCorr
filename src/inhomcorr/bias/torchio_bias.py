@@ -41,8 +41,8 @@ class BiasCreatorTorchio(BiasCreator):
                                      coefficients=rnd_coeff)
 
         # Return as Image object
-        bf_image = ImageData()
-        bf_image.data = torch.tensor(bf).unsqueeze(0)
+        bf_image = ImageData(torch.tensor(bf).unsqueeze(0))
+
         return bf_image
 
     def get_random_bias_fields(self, image: ImageData,
