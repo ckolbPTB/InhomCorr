@@ -58,16 +58,17 @@ class MRData():
 
     @mask.setter
     def mask(self, value: torch.Tensor):
-        """Setter for mask.
+        """Setter of the mask tensor.
 
         Parameters
         ----------
         value
-            torch.Tensor
+            Torch tensor to be set.
 
-        Returns
-        -------
-            None
+        Raises
+        ------
+        RuntimeError
+            Raises an error if shape does not match.
         """
         try:
             self._shape = torch.broadcast_shapes(value.shape, self._shape)
@@ -100,16 +101,17 @@ class ImageData(MRData):
 
     @data.setter
     def data(self, value: torch.Tensor):
-        """Setter for data.
+        """Setter of the data attribute.
 
         Parameters
         ----------
         value
-            torch.Tensor
+            Tensor to be set.
 
-        Returns
-        -------
-            None
+        Raises
+        ------
+        RuntimeError
+            Error is raised if shape does not match.
         """
         try:
             self._shape = torch.broadcast_shapes(value.shape, self._shape)
@@ -123,16 +125,23 @@ class ImageData(MRData):
 
     @property
     def numpy(self) -> np.ndarray:
-        """Get the data as numpy array.
+        """Torch tensor to numpy array function.
 
         The function forces the conversion to cpu and detaches
         from autograd.
 
+        TODO: Check if really required.
+
         Returns
         -------
-            numpy nd array or None
+            Numpy array representation of torch data tensor.
+
+        Raises
+        ------
+        AttributeError
+            Raises an error if data is none.
         """
-        if not self._data:
+        if self._data is None:
             raise AttributeError('Data not defined.')
         return self._data.numpy(force=True)
 
@@ -172,12 +181,17 @@ class QMRIData(MRData):
 
     @t1.setter
     def t1(self, value: torch.Tensor | None) -> None:
-        """Setter for t1.
+        """Setter of the t1 map.
 
         Parameters
         ----------
         value
-            T1 map tensor [s]
+            Torch tensor with t1 map.
+
+        Raises
+        ------
+        RuntimeError
+            Raises an error if shape does not match.
         """
         if value is None:
             value = torch.tensor(float('inf')).reshape((1, 1, 1, 1))
@@ -203,12 +217,17 @@ class QMRIData(MRData):
 
     @rho.setter
     def rho(self, value: torch.Tensor) -> None:
-        """Setter of rho.
+        """Setter of the rho map.
 
         Parameters
         ----------
         value
-            Rho map tensor [au]
+            Torch tensor with rho map.
+
+        Raises
+        ------
+        RuntimeError
+            Raises an error if shape does not match.
         """
         if value is None:
             # Defaults to (1, 1, 1, 1) Tensor with value 1.
