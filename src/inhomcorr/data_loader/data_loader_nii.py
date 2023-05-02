@@ -4,6 +4,7 @@ from pathlib import Path
 import nibabel as nib
 import numpy as np
 import torch
+from scipy import ndimage as ndi
 
 from inhomcorr.data_loader.data_loader_interface import QMRIDataLoader
 from inhomcorr.interfaces import QMRIData
@@ -66,7 +67,16 @@ class QMRIDataLoaderNii(QMRIDataLoader):
         qmri_data.t1 = torch.moveaxis(qmri_data.t1, (0, 1, 2), (2, 1, 0))
 
         # Calculate rho from m0
-        rho = nii_data[:, :, :, 0]
+        # Get m0
+        m0 = nii_data[:, :, :, 0]
+
+        # Calculate mask
+        m0 = m0 / m0.max()
+        rho = np.zeros(m0.shape)
+        rho[m0 > 0.02] = 1
+
+        rho = ndi.morphology.binary_opening(
+            rho.astype(int), np.ones((2, 2)).astype(int), iterations=10)
 
         # Add rho
         qmri_data.rho = torch.FloatTensor(rho)
