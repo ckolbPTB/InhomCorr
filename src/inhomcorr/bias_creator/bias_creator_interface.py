@@ -2,7 +2,7 @@
 from abc import ABC
 from abc import abstractmethod
 
-from inhomcorr.interfaces import ImageData
+from inhomcorr.mrdata import ImageData
 
 
 class BiasCreator(ABC):

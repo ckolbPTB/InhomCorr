@@ -1,8 +1,8 @@
 """Tests of bias field operation."""
 import unittest
 
-from inhomcorr.bias.torchio_bias import BiasCreatorTorchio
-from inhomcorr.interfaces.mr_data_interface import ImageData
+from inhomcorr.bias_creator.torchio_bias import BiasCreatorTorchio
+from inhomcorr.mrdata import ImageData
 from tests.testdata import TestData
 
 

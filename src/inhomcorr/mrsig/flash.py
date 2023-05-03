@@ -4,10 +4,10 @@ from dataclasses import dataclass
 
 import torch
 
-from inhomcorr.interfaces import ImageData
-from inhomcorr.interfaces import MRParam
-from inhomcorr.interfaces import MRSig
-from inhomcorr.interfaces import QMRIData
+from inhomcorr.mrdata import ImageData
+from inhomcorr.mrdata import QMRIData
+from inhomcorr.mrsig.mrsig_interface import MRParam
+from inhomcorr.mrsig.mrsig_interface import MRSig
 
 
 @dataclass

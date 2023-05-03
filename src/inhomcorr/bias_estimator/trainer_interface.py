@@ -4,7 +4,7 @@ from abc import abstractmethod
 from typing import Any
 
 from inhomcorr.interfaces import BiasEstimator
-from inhomcorr.interfaces import BiasFieldDataset
+from inhomcorr.interfaces import SupervisedTrainingDataset
 
 
 class TrainingParameters(ABC):
@@ -21,7 +21,7 @@ class Trainer(ABC):
         pass
 
     @abstractmethod
-    def _call__(self, dataset: BiasFieldDataset) -> None:
+    def _call__(self, dataset: SupervisedTrainingDataset) -> None:
         """Inferface of a bias field estimato Trainer.
 
         Parameters

@@ -6,7 +6,7 @@ import nibabel as nib
 import numpy as np
 
 from inhomcorr.data_loader.data_loader_nii import QMRIDataLoaderNii
-from inhomcorr.interfaces import QMRIData
+from inhomcorr.mrdata import QMRIData
 
 
 class TestQMRIDataLoaderNii(unittest.TestCase):

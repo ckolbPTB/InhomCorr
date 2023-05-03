@@ -1,8 +1,8 @@
 """File containing a test data object."""
 import torch
 
-from inhomcorr.interfaces.mr_data_interface import ImageData
-from inhomcorr.interfaces.mr_data_interface import QMRIData
+from inhomcorr.mrdata import ImageData
+from inhomcorr.mrdata import QMRIData
 from inhomcorr.mrsig.flash import MRParamGRE
 
 
