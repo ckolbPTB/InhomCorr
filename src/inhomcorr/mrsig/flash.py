@@ -61,7 +61,6 @@ class MRSigFlash(MRSig):
             # greimage = greimage * math.exp(param.te / qmap.t2s)
 
         # save the GRE image in ImageData and return it
-        gre_id = ImageData()
-        gre_id.data = torch.Tensor(greimage)
+        gre_id = ImageData(torch.Tensor(greimage))
 
         return gre_id

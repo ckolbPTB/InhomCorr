@@ -14,18 +14,17 @@ class TestImageData(unittest.TestCase):
         self.shape = self.data.shape
 
     def test_2D_shape(self):
-        dummy = ImageData()
-        dummy.data = self.data.get_random_tensor()
+        dummy = ImageData(self.data.get_random_tensor())
         self.assertEqual(dummy.shape, self.shape)
 
     def test_set_mask(self):
-        dummy = ImageData()
-        dummy_mask = torch.randint(1, self.shape)
-        dummy.mask = dummy_mask
-        torch.testing.assert_close(dummy.mask, dummy_mask)
+        img = self.data.get_random_image()
+        mask = torch.randint(1, self.shape)
+        img.mask = mask
+        torch.testing.assert_close(img.mask, mask)
 
     def test_set_header(self):
-        dummy = ImageData()
-        dummy_header = {'test': 8956}
-        dummy.header = dummy_header
-        self.assertEqual(dummy.header['test'], dummy_header['test'])
+        img = self.data.get_random_image()
+        header = {'test': 8956}
+        img.header = header
+        self.assertEqual(img.header['test'], header['test'])
