@@ -1,58 +1,38 @@
-# %%
-"""File: dcm2nii.py."""
-#   Routines to convert dicom images into nifti format
-#   Input is the name of the dicom folder
-#   Output is the name of the newly created nifti folder
-#   Heavily relies on package dicom2nifti
-#        https://github.com/icometrix/dicom2nifti
+"""Routines to convert dicom images into nifti format.
+Heavily relies on package dicom2nifti
+https://github.com/icometrix/dicom2nifti.
+"""
+
+import tempfile
+from pathlib import Path
 
 import dicom2nifti
 import dicom2nifti.settings as settings
 
 
-#   Converting a directory with dicom files to nifti files
-#       (one nifti file for each series)
-def convert_dcm2nii_dir(folder_in_dicom, folder_out_nifti):
-    """_summary_.
+def convert_dcm2nii_dir(folder_in_dicom: Path,
+                        folder_out_nifti: Path | None = None) -> list:
+    """Convert dicoms in a directory to niftis.
 
     Parameters
     ----------
     folder_in_dicom
-        _description_
+        folder to convert all dicoms in
     folder_out_nifti
-        _description_
-    """
-    dicom2nifti.convert_directory(
-        folder_in_dicom, folder_out_nifti, reorient=True, compression=False)
+        target folder, has to be writable to.
+        None (default) will create a temp directory.
 
-
-def convert_dcm2nii_dir_series2file(folder_in_dicom, file_out_nifti):
-    """_summary_.
-
-    Parameters
-    ----------
-    folder_in_dicom
-        _description_
-    file_out_nifti
-        _description_
-    """
-    dicom2nifti.dicom_series_to_nifti(
-        folder_in_dicom, file_out_nifti, reorient_nifti=True)
-
-
-# converts all dicom images in a folder into nifti files,
-#     individual slices are allowed
-def convert_dcm2nii_dir_single_slices(folder_in_dicom, folder_out_nifti):
-    """_summary_.
-
-    Parameters
-    ----------
-    folder_in_dicom
-        _description_
-    folder_out_nifti
-        _description_
+    Returns
+    -------
+        List of nifti files
     """
     settings.disable_validate_slicecount()
+    if folder_out_nifti is None:
+        folder_out_nifti = Path(tempfile.mkdtemp())
+
+    existing_niftis = set(folder_out_nifti.glob('*.nii'))
     dicom2nifti.convert_directory(
-        folder_in_dicom, folder_out_nifti, compression=False)
-# %%
+        folder_in_dicom, folder_out_nifti, reorient=True, compression=False)
+    current_nifits = set(folder_out_nifti.glob('*.nii'))
+    new_nifits = current_nifits-existing_niftis
+    return list(new_nifits)
