@@ -11,62 +11,51 @@ from inhomcorr.mrdata import QMRIData
 
 
 class QMRIDataLoaderNii(QMRIDataLoader):
-    """Load QMRIData objects from nifti file(s)."""
+    """Load QMRIData object from nifti file(s)."""
 
     def __init__(self) -> None:
-        self.qmri_data_list: list[QMRIData] = []
+        self.qmri_data = QMRIData()
 
-    def add_qmridata_from_folder(self, foldername_nii: str) -> None:
-        """Read in all nii files from folder and add them.
-
-        Parameters
-        ----------
-            foldername_nii (str): Foldername where all nii files are
-        """
-        # Verify path
-        path_nii = Path(foldername_nii)
-        assert path_nii.is_dir(), f'Directory {str(path_nii)} not found.'
-
-        # Get all nifti files
-        nii_file_list = path_nii.glob('*.nii')
-
-        # Create QMRIData
-        for nii_file in nii_file_list:
-            self.qmri_data_list.append(
-                self.load_data_from_single_file(str(nii_file)))
-
-    def load_data_from_single_file(self, filename_nii: str) -> QMRIData:
-        """Load quantitative paramaters from file and create a QMRIData object.
+    def load_header(self, file_nii: Path) -> None:
+        """Load header from nifti file.
 
         Parameters
         ----------
-            Name of nifti file were parameters are stored
-
-        Returns
-        -------
-            QMRIData object containting t1, rho and nifti header
-        """
+        file_nii
+            provide nii file used for header of QMRIData object
+        """        """"""
         # Read in nii file
-        nii_file = nib.load(filename_nii)
+        nii_file = nib.load(file_nii)
+        self.qmri_data.header = dict(nii_file.header)
 
-        # Get numpy data as float32
-        nii_data = np.asarray(nii_file.dataobj, dtype=np.float32)
+    def load_t1(self, file_nii: Path, t1_dim: int = 2) -> None:
+        """Load T1 from from nifti file.
 
-        # Verify size
-        if nii_data.ndim != 4:
-            raise NotImplementedError(
-                'Currently only 4-dimensional nifti images can be read in')
+        Parameters
+        ----------
+        file_nii
+             provide nii file used for T1 of QMRIData object
+        t1_dim, optional
+            if file_nii is 4d, specifies the dimension where T1 is stored,
+            by default 2
+        """
+        self.qmri_data.t1, self.t1_nii_file_dim = self._load_param_from_nii(
+            file_nii, t1_dim)
 
-        # Prepare t1
-        t1 = (nii_data[:, :, :, 2])
-        t1 = torch.as_tensor(t1, dtype=torch.float32)
+    def load_rho(self, file_nii: Path, m0_dim: int = 0) -> None:
+        """Load rho from from nifti file.
 
-        # Nifti is [x,y,z], QMRIData is [z,y,x]
-        t1 = torch.moveaxis(t1, (0, 1, 2), (2, 1, 0))
+        Parameters
+        ----------
+        file_nii
+             provide nii file used for rho of QMRIData object
+        t1_dim, optional
+            if file_nii is 4d, specifies the dimension where m0 is stored,
+            by default 0
+        """
+        m0, self.m0_nii_file_dim = self._load_param_from_nii(file_nii, m0_dim)
 
         # Calculate rho from m0
-        m0 = nii_data[:, :, :, 0]
-
         # Calculate mask
         m0 = m0 / m0.max()
         rho = np.zeros(m0.shape)
@@ -75,39 +64,60 @@ class QMRIDataLoaderNii(QMRIDataLoader):
         rho = ndi.morphology.binary_opening(
             rho.astype(int), np.ones((2, 2, 2)).astype(int), iterations=10)
 
-        rho = torch.as_tensor(rho, dtype=torch.float32)
+        self.qmri_data.rho = torch.as_tensor(rho, dtype=torch.float32)
 
-        # Nifti is [x,y,z], QMRIData is [z,y,x]
-        rho = torch.moveaxis(rho, (0, 1, 2), (2, 1, 0))
-
-        # Create QMRData
-        qmri_data = QMRIData(t1=t1, rho=rho)
-
-        # Add nifti header
-        qmri_data.header = dict(nii_file.header)
-
-        return (qmri_data)
-
-    def get_data(self, index: int) -> QMRIData:
-        """Return single QMRIData object.
+    def _load_param_from_nii(self, filename_nii: Path,
+                             dim: int = None) -> tuple[torch.Tensor, int]:
+        """Gerneral function to load parameter from nifti file.
 
         Parameters
         ----------
-        index
-            Index of the object
+        filename_nii
+            nii file
+        dim, optional
+            dimension of specific parameter in case of 4d nifit object,
+            by default None
+
+        Returns
+        -------
+            torch.Tensor with parameter data
+            int with number of dimensions of nii file
+
+        Raises
+        ------
+        ValueError
+            _description_
+        """
+        # Read in nii file
+        nii_file = nib.load(filename_nii)
+
+        # Get numpy data as float32
+        nii_data = np.asarray(nii_file.dataobj, dtype=np.float32)
+
+        # revert oder of axis
+        nii_data = np.transpose(nii_data)
+
+        # Verify size of nii file
+        ndim = nii_data.ndim
+        if ndim == 4:
+            nii_data = nii_data[dim]
+
+        elif ndim == 2:
+            nii_data = nii_data[np.newaxis]
+
+        elif ndim != 3:
+            raise ValueError(f'Wrong number of dimensions in nii file: {ndim}.\
+                            Needs to be 2, 3 or 4 dimensional.')
+
+        data = torch.as_tensor(nii_data, dtype=torch.float32)
+
+        return data, ndim
+
+    def get_data(self) -> QMRIData:
+        """Return QMRIData object.
 
         Returns
         -------
             QMRIData object
         """
-        assert index < len(self.qmri_data_list)
-        return (self.qmri_data_list[index])
-
-    def get_all_data(self) -> list[QMRIData]:
-        """Return all available QMRIData objects.
-
-        Returns
-        -------
-            List of QMRIData objects
-        """
-        return (self.qmri_data_list)
+        return self.qmri_data

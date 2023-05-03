@@ -13,7 +13,7 @@ class QMRIDataLoader(ABC):
         pass
 
     @abstractmethod
-    def get_data(self, index: int) -> QMRIData:
+    def load_t1(self, index: int) -> QMRIData:
         """Return single QMRIData object.
 
         Parameters
@@ -24,15 +24,5 @@ class QMRIDataLoader(ABC):
         Returns
         -------
             QMRIData object
-        """
-        pass
-
-    @abstractmethod
-    def get_all_data(self) -> list[QMRIData]:
-        """Return all available QMRIData objects.
-
-        Returns
-        -------
-            List of QMRIData objects
         """
         pass
