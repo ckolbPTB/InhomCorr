@@ -22,4 +22,4 @@ class TestDCM2NII(unittest.TestCase):
         files = list(self.tmp_path_1dcm.glob('*.nii'))
         self.assertEqual(len(files), 1)
         nii = nibabel.load(files[0])
-        self.assertEqual(nii.shape, (1, 512, 512))
+        self.assertEqual(nii.shape, (1, 512, 512)
