@@ -9,8 +9,8 @@ from tests.testdata import TestData
 class TestBiasCreationTorchio(unittest.TestCase):
 
     def setUp(self):
-        testdata = TestData(shape=(1, 1, 40, 30))
-        self.shape = testdata.shape
+        self.shape = (1, 1, 40, 30)
+        testdata = TestData(img_shape=self.shape)
         self.image = testdata.get_random_image()
 
     def test_bias_creation_torchio(self):

@@ -10,12 +10,14 @@ class TestData:
     """TestData."""
 
     def __init__(self,
-                 shape: tuple[int, int, int, int] = (1, 1, 8, 8)
-                 ) -> None:
-        self.shape = shape
+                 img_shape: tuple[int, int, int, int] = (1, 1, 8, 8),
+                 qmri_shape: tuple[int, int, int] = (1, 8, 8)) -> None:
+        self.img_shape = img_shape
+        self.qmri_shape = qmri_shape
 
-    def get_mr_param_gre(self, tr: float = 100e-3,
-                         alpha: int = 35) -> MRParamGRE:
+    def get_gre_param(self,
+                      tr: float = 100e-3,
+                      alpha: int = 35) -> MRParamGRE:
         """Get an MRParamT1 Object for Testing.
 
         Parameters
@@ -42,8 +44,8 @@ class TestData:
             QMRI data object
         """
         qmri = QMRIData()
-        qmri.t1 = torch.rand(self.shape, dtype=torch.float)
-        qmri.rho = torch.rand(self.shape, dtype=torch.float)
+        qmri.t1 = torch.rand(self.qmri_shape, dtype=torch.float)
+        qmri.rho = torch.rand(self.qmri_shape, dtype=torch.float)
         return qmri
 
     def get_random_image(self) -> ImageData:
@@ -53,39 +55,29 @@ class TestData:
         -------
             Image data object
         """
-        image = ImageData(torch.rand(self.shape, dtype=torch.float))
+        image = ImageData(torch.rand(self.img_shape, dtype=torch.float))
         return image
 
-    def get_random_tensor(self) -> torch.Tensor:
-        """Create a random float tensor.
+    def get_test_data(self) -> tuple[QMRIData, MRParamGRE, ImageData]:
+        """Generate Test QMRI and Image Objects.
 
         Returns
         -------
-            Random tensor
+            Tuple of qmri, mr gre params and image data object
         """
-        return torch.rand(self.shape, dtype=torch.float)
-
-    def get_test_qmri(self) -> QMRIData:
-        """Generate a QMRI Object.
-
-        Returns
-        -------
-            QMRI data object
-        """
+        # Create qmri input data
         qmri = QMRIData()
         qmri.t1 = torch.tensor(
             [[1e-3, 1], [1e-3, 1]], dtype=torch.float)
         qmri.rho = torch.tensor(
             [[1, 1], [0.1, 0.1]], dtype=torch.float)
-        return qmri
 
-    def get_test_image(self) -> ImageData:
-        """Generate a Image Object.
+        params = self.get_gre_param()
 
-        Returns
-        -------
-            Image data object
-        """
+        # Create reference image data
         image = ImageData(torch.tensor(
-            [[-0.4282, -0.0224], [-0.0428, -0.0022]], dtype=torch.float))
-        return image
+            [[-0.4282, -0.0224],
+             [-0.0428, -0.0022]], dtype=torch.float)
+        )
+
+        return (qmri, params, image)

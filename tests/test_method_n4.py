@@ -7,7 +7,7 @@ from tests.testdata import TestData
 
 class TestN4Estimator(unittest.TestCase):
     def setUp(self):
-        self.TestData = TestData(shape=(1, 1, 64, 64))
+        self.TestData = TestData(img_shape=(1, 1, 64, 64))
 
     def test_biasfield_estimation(self):
         testImage = self.TestData.get_random_image()
