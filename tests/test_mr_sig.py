@@ -9,8 +9,11 @@ from tests.testdata import TestData
 class TestMRSigFlash(unittest.TestCase):
 
     def setUp(self):
-        self.rand_shape = (1, 1, 16, 16)
-        self.testdata = TestData(shape=self.rand_shape)
+        # Create two instances of testdata for image and qmri
+        self.img_shape = (1, 1, 16, 16)
+        self.qmri_shape = (1, 16, 16)
+        self.testdata = TestData(img_shape=self.img_shape,
+                                 qmri_shape=self.qmri_shape)
         self.rand_qmri = self.testdata.get_random_qmri()
 
     def test_rand_mr_sig_flash(self):
@@ -20,7 +23,7 @@ class TestMRSigFlash(unittest.TestCase):
         img = mrsig(self.rand_qmri, param)
 
         # Test shape and dtype
-        self.assertEqual(self.rand_shape, img.shape)
+        self.assertEqual(self.img_shape, img.shape)
         self.assertIsInstance(img, ImageData)
 
     def test_mr_sig_flash(self):
@@ -35,6 +38,5 @@ class TestMRSigFlash(unittest.TestCase):
         # Check if output image is instance of ImageData
         self.assertIsInstance(img_out, ImageData)
 
-        # Test MRSig values and dtype
-        for io, ir in zip(img_out.data.flatten(), img_ref.data.flatten()):
-            self.assertAlmostEqual(float(io), float(ir), delta=1e-4)
+        img_mse = float(((img_out.data-img_ref.data)**2).mean())
+        self.assertEqual(img_mse, 0)

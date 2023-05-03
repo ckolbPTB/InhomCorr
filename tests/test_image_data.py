@@ -10,12 +10,13 @@ from tests.testdata import TestData
 class TestImageData(unittest.TestCase):
 
     def setUp(self):
-        self.data = TestData()
-        self.shape = self.data.shape
+        self.shape = (1, 1, 8, 8)
+        self.data = TestData(img_shape=self.shape)
 
     def test_2D_shape(self):
-        dummy = ImageData(self.data.get_random_tensor())
-        self.assertEqual(dummy.shape, self.shape)
+        data = torch.rand(self.shape, dtype=torch.float)
+        dummy = ImageData(data)
+        self.assertEqual(dummy.shape, data.shape)
 
     def test_set_mask(self):
         img = self.data.get_random_image()
