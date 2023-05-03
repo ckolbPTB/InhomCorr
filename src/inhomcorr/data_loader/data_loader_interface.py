@@ -1,6 +1,7 @@
 """Interface for Data loader."""
 from abc import ABC
 from abc import abstractmethod
+from pathlib import Path
 
 from inhomcorr.mrdata import QMRIData
 
@@ -13,7 +14,7 @@ class QMRIDataLoader(ABC):
         pass
 
     @abstractmethod
-    def get_data(self, index: int) -> QMRIData:
+    def load_t1(self, file: Path, dim: int) -> None:
         """Return single QMRIData object.
 
         Parameters
@@ -28,11 +29,11 @@ class QMRIDataLoader(ABC):
         pass
 
     @abstractmethod
-    def get_all_data(self) -> list[QMRIData]:
-        """Return all available QMRIData objects.
+    def get_data(self) -> QMRIData:
+        """Return QMRIData object.
 
         Returns
         -------
-            List of QMRIData objects
+            QMRIData object
         """
         pass

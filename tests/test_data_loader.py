@@ -1,6 +1,7 @@
 """Data loader tests."""
 import os
 import unittest
+from pathlib import Path
 
 import nibabel as nib
 import numpy as np
@@ -21,7 +22,7 @@ class TestQMRIDataLoaderNii(unittest.TestCase):
                               self.shape[2], self.shape[3])
         nifti_im = nib.Nifti1Image(dat, affine=np.eye(4))
         nifti_im.header['descrip'] = 'testing'
-        self.nii_file = self.tmp_path + '/test_nii_rho_alpha_t1.nii'
+        self.nii_file = Path(self.tmp_path + '/test_nii_rho_alpha_t1.nii')
         nib.save(nifti_im, self.nii_file)
 
     def tearDown(self):
@@ -30,14 +31,10 @@ class TestQMRIDataLoaderNii(unittest.TestCase):
 
     def test_load_qmri_nii_file(self):
         qmri_dat_ld = QMRIDataLoaderNii()
-        self.assertEqual(len(qmri_dat_ld.qmri_data_list), 0)
-        qmri_dat_ld.add_qmridata_from_folder(self.tmp_path)
-
-        # Verify that the data was added correctly
-        self.assertEqual(len(qmri_dat_ld.qmri_data_list), 1)
-        self.assertEqual(len(qmri_dat_ld.get_all_data()), 1)
+        qmri_dat_ld.load_t1(self.nii_file)
+        qmri_dat_ld.load_rho(self.nii_file)
 
         # Verfiy type, shape and header of data
-        qmri_dat = qmri_dat_ld.get_data(0)
+        qmri_dat = qmri_dat_ld.get_data()
         self.assertIsInstance(qmri_dat, QMRIData)
         self.assertEqual(list(qmri_dat.t1.shape), list(self.shape[-2::-1]))
