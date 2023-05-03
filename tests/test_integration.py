@@ -14,7 +14,7 @@ class TestImageData(unittest.TestCase):
     def setUp(self):
         self.nifti_files = list(Path(TEST_DATA_DIR).rglob('*.nii'))
         testdata = TestData()
-        self.param = testdata.get_mr_param_gre()
+        self.param = testdata.get_gre_param()
 
     def integration_single_file(self, file):
         # Load data from nifiti file
