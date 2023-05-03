@@ -75,9 +75,9 @@ class TestData:
         params = self.get_gre_param()
 
         # Create reference image data
-        image = ImageData(
-            torch.tensor([[-0.4282, -0.0224],
-                          [-0.0428, -0.0022]], dtype=torch.float)
+        image = ImageData(torch.tensor(
+            [[-0.4282, -0.0224],
+             [-0.0428, -0.0022]], dtype=torch.float)
         )
 
         return (qmri, params, image)
