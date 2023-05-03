@@ -23,7 +23,7 @@ def convert_dcm2nii_dir(folder_in_dicom, folder_out_nifti):
         _description_
     """
     dicom2nifti.convert_directory(
-        folder_in_dicom, folder_out_nifti, reorient=True)
+        folder_in_dicom, folder_out_nifti, reorient=True, compression=False)
 
 
 def convert_dcm2nii_dir_series2file(folder_in_dicom, file_out_nifti):
@@ -54,5 +54,5 @@ def convert_dcm2nii_dir_single_slices(folder_in_dicom, folder_out_nifti):
     """
     settings.disable_validate_slicecount()
     dicom2nifti.convert_directory(
-        folder_in_dicom, folder_out_nifti)
+        folder_in_dicom, folder_out_nifti, compression=False)
 # %%
