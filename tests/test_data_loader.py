@@ -30,14 +30,10 @@ class TestQMRIDataLoaderNii(unittest.TestCase):
 
     def test_load_qmri_nii_file(self):
         qmri_dat_ld = QMRIDataLoaderNii()
-        self.assertEqual(len(qmri_dat_ld.qmri_data_list), 0)
-        qmri_dat_ld.add_qmridata_from_folder(self.tmp_path)
-
-        # Verify that the data was added correctly
-        self.assertEqual(len(qmri_dat_ld.qmri_data_list), 1)
-        self.assertEqual(len(qmri_dat_ld.get_all_data()), 1)
+        qmri_dat_ld.load_t1(self.nii_file)
+        qmri_dat_ld.load_rho(self.nii_file)
 
         # Verfiy type, shape and header of data
-        qmri_dat = qmri_dat_ld.get_data(0)
+        qmri_dat = qmri_dat_ld.get_data()
         self.assertIsInstance(qmri_dat, QMRIData)
         self.assertEqual(list(qmri_dat.t1.shape), list(self.shape[-2::-1]))
