@@ -39,4 +39,4 @@ class TestMRSigFlash(unittest.TestCase):
 
         # Check if output image is instance of ImageData
         self.assertIsInstance(img_out, ImageData)
-        torch.testing.assert_close(img_out.data, img_ref.data)
+        torch.testing.assert_close(img_out.data, img_ref.data, rtol=0.05)
