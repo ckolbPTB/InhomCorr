@@ -1,6 +1,7 @@
 """Data loader tests."""
 import os
 import unittest
+from pathlib import Path
 
 import nibabel as nib
 import numpy as np
@@ -21,7 +22,7 @@ class TestQMRIDataLoaderNii(unittest.TestCase):
                               self.shape[2], self.shape[3])
         nifti_im = nib.Nifti1Image(dat, affine=np.eye(4))
         nifti_im.header['descrip'] = 'testing'
-        self.nii_file = self.tmp_path + '/test_nii_rho_alpha_t1.nii'
+        self.nii_file = Path(self.tmp_path + '/test_nii_rho_alpha_t1.nii')
         nib.save(nifti_im, self.nii_file)
 
     def tearDown(self):
