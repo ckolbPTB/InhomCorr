@@ -17,7 +17,7 @@ class MRData(ABC):
     def __init__(self) -> None:
         self._header: dict = {}
         self._mask: torch.Tensor | None = None
-        self._shape: tuple[int, int, int, int] = (1, 1, 1, 1)
+        self._shape: tuple[int, int, int, int] | tuple[int, int, int]
         self._device: torch.device | None = None
 
     @property
@@ -150,6 +150,7 @@ class ImageData(MRData):
     def __init__(self, data: torch.Tensor) -> None:
         super().__init__()
         self._data: torch.Tensor = torch.tensor([])
+        self._shape: tuple[int, int, int, int] = (1, 1, 1, 1)
         self._device = data.device
         self.data = data
 
@@ -240,6 +241,7 @@ class QMRIData(MRData):
         super().__init__()
 
         # Set initial class attributes
+        self._shape: tuple[int, int, int] = (1, 1, 1)
         self._t1 = torch.tensor([])
         self._rho = torch.tensor([])
 
@@ -276,8 +278,9 @@ class QMRIData(MRData):
             Raises an error if shape does not match.
         """
         if value is None:
-            value = torch.tensor(float('inf')).reshape((1, 1, 1, 1))
+            value = torch.tensor(float('inf')).reshape((1, 1, 1))
         else:
+            value = torch.as_tensor(value)
             if self._device is None:
                 self._device = value.device
             else:
@@ -317,10 +320,11 @@ class QMRIData(MRData):
             Raises an error if shape does not match.
         """
         if value is None:
-            # Defaults to (1, 1, 1, 1) Tensor with value 1.
+            # Defaults to (1, 1, 1) Tensor with value 1.
             value = torch.tensor(1.).reshape(
-                (1, 1, 1, 1)).to(device=self.device)
+                (1, 1, 1)).to(device=self.device)
         else:
+            value = torch.as_tensor(value)
             if self._device is None:
                 self._device = value.device
             else:
