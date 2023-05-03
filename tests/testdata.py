@@ -86,7 +86,6 @@ class TestData:
         -------
             Image data object
         """
-        image = ImageData()
-        image.data = torch.tensor(
-            [[-0.4282, -0.0224], [-0.0428, -0.0022]], dtype=torch.float)
+        image = ImageData(torch.tensor(
+            [[-0.4282, -0.0224], [-0.0428, -0.0022]], dtype=torch.float))
         return image
