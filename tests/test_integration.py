@@ -32,8 +32,10 @@ class TestImageData(unittest.TestCase):
         mrsig(qmridata, self.param)
 
     def test_integration(self):
-        for file in self.nifti_files:
-            self.integration_single_file(file)
+        # only run if test data is available
+        if Path.exists(TEST_DATA_DIR):
+            for file in self.nifti_files:
+                self.integration_single_file(file)
 
 
 if __name__ == '__main__':
