@@ -162,7 +162,7 @@ class ImageData(MRData):
         -------
             torch.Tensor
         """
-        return self._data
+        return torch.broadcast_to(self._data, self._shape)
 
     @data.setter
     def data(self, value: torch.Tensor):
