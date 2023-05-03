@@ -46,9 +46,6 @@ class QMRIDataLoaderNii(QMRIDataLoader):
         -------
             QMRIData object containting t1, rho and nifti header
         """
-        # Create empty QMRIData object
-        qmri_data = QMRIData()
-
         # Read in nii file
         nii_file = nib.load(filename_nii)
 
@@ -60,11 +57,12 @@ class QMRIDataLoaderNii(QMRIDataLoader):
             raise NotImplementedError(
                 'Currently only 4-dimensional nifti images can be read in')
 
-        # Add t1
-        qmri_data.t1 = torch.FloatTensor(nii_data[:, :, :, 2])
+        # Prepare t1
+        t1 = (nii_data[:, :, :, 2])
+        t1 = torch.as_tensor(t1, dtype=torch.float32)
 
         # Nifti is [x,y,z], QMRIData is [z,y,x]
-        qmri_data.t1 = torch.moveaxis(qmri_data.t1, (0, 1, 2), (2, 1, 0))
+        t1 = torch.moveaxis(t1, (0, 1, 2), (2, 1, 0))
 
         # Calculate rho from m0
         m0 = nii_data[:, :, :, 0]
@@ -77,11 +75,13 @@ class QMRIDataLoaderNii(QMRIDataLoader):
         rho = ndi.morphology.binary_opening(
             rho.astype(int), np.ones((2, 2, 2)).astype(int), iterations=10)
 
-        # Add rho
-        qmri_data.rho = torch.FloatTensor(rho)
+        rho = torch.as_tensor(rho, dtype=torch.float32)
 
         # Nifti is [x,y,z], QMRIData is [z,y,x]
-        qmri_data.rho = torch.moveaxis(qmri_data.rho, (0, 1, 2), (2, 1, 0))
+        rho = torch.moveaxis(rho, (0, 1, 2), (2, 1, 0))
+
+        # Create QMRData
+        qmri_data = QMRIData(t1=t1, rho=rho)
 
         # Add nifti header
         qmri_data.header = dict(nii_file.header)
