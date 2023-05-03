@@ -1,7 +1,7 @@
 """N4 Estimator tests."""
 import unittest
 
-from inhomcorr.methods import N4Estimator
+from inhomcorr.bias_estimator import N4Estimator
 from tests.testdata import TestData
 
 

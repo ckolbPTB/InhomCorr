@@ -3,8 +3,8 @@
 import torch
 import torchio as tio
 
-from inhomcorr.interfaces import BiasCreator
-from inhomcorr.interfaces import ImageData
+from inhomcorr.bias_creator.bias_creator_interface import BiasCreator
+from inhomcorr.mrdata import ImageData
 
 
 class BiasCreatorTorchio(BiasCreator):

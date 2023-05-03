@@ -5,9 +5,9 @@ import numpy as np
 import SimpleITK as sitk
 import torch
 
-from inhomcorr.interfaces import BiasEstimator
-from inhomcorr.interfaces import HyperParameters
-from inhomcorr.interfaces import ImageData
+from inhomcorr.bias_estimator.bias_estimator_interface import BiasEstimator
+from inhomcorr.bias_estimator.bias_estimator_interface import HyperParameters
+from inhomcorr.mrdata import ImageData
 
 
 @dataclass

@@ -7,7 +7,7 @@ import torch
 from scipy import ndimage as ndi
 
 from inhomcorr.data_loader.data_loader_interface import QMRIDataLoader
-from inhomcorr.interfaces import QMRIData
+from inhomcorr.mrdata import QMRIData
 
 
 class QMRIDataLoaderNii(QMRIDataLoader):

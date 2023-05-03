@@ -2,7 +2,7 @@
 from abc import ABC
 from abc import abstractmethod
 
-from inhomcorr.interfaces import QMRIData
+from inhomcorr.mrdata import QMRIData
 
 
 class QMRIDataLoader(ABC):

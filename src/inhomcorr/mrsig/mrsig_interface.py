@@ -3,8 +3,8 @@ import abc
 from dataclasses import dataclass
 from typing import Any
 
-from inhomcorr.interfaces import ImageData
-from inhomcorr.interfaces import QMRIData
+from inhomcorr.mrdata import ImageData
+from inhomcorr.mrdata import QMRIData
 
 
 @dataclass
