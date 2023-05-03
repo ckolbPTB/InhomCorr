@@ -21,6 +21,7 @@ class TestDCM2NII(unittest.TestCase):
             self.tmp_path_1dcm, self.tmp_path_1dcm)
 
         # get all the files in the tmp_path_1dcm
+        print(os.getcwd())
         files = [f for f in os.listdir(self.tmp_path_1dcm)
                  if os.path.isfile(os.path.join(self.tmp_path_1dcm, f))]
 
