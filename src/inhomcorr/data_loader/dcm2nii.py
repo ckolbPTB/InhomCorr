@@ -1,4 +1,5 @@
 """Routines to convert dicom images into nifti format.
+
 Heavily relies on package dicom2nifti
 https://github.com/icometrix/dicom2nifti.
 """
