@@ -1,6 +1,8 @@
 """Tests of mr signal T1 object."""
 import unittest
 
+import torch
+
 from inhomcorr.mrdata import ImageData
 from inhomcorr.mrsig.flash import MRSigFlash
 from tests.testdata import TestData
@@ -37,6 +39,4 @@ class TestMRSigFlash(unittest.TestCase):
 
         # Check if output image is instance of ImageData
         self.assertIsInstance(img_out, ImageData)
-
-        img_mse = float(((img_out.data-img_ref.data)**2).mean())
-        self.assertEqual(img_mse, 0)
+        torch.testing.assert_close(img_out.data, img_ref.data)

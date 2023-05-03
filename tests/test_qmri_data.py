@@ -31,10 +31,8 @@ class TestQMRIData(unittest.TestCase):
         qmri = QMRIData(t1=self.t1_test,
                         rho=self.rho_test)
         # Calculate mse and check if mse equals 0
-        t1_mse = float(((qmri.t1-self.t1_test)**2).mean())
-        rho_mse = float(((qmri.rho-self.rho_test)**2).mean())
-        self.assertEqual(t1_mse, 0)
-        self.assertEqual(rho_mse, 0)
+        torch.testing.assert_close(qmri.t1, self.t1_test)
+        torch.testing.assert_close(qmri.rho, self.rho_test)
 
     def test_default_values(self):
         # Construct qmri with default values
