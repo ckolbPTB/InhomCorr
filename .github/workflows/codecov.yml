@@ -19,10 +19,10 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install coverage
-          pip install .[test]
+          pip install -e .[test]
 
-          coverage run -m unittest
-          coverage report
+          coverage run -m unittest discover
+          coverage report --omit="*/tests/*"
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v2
