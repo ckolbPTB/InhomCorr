@@ -1,4 +1,5 @@
 """Data loader tests."""
+import os
 import unittest
 from pathlib import Path
 
@@ -12,6 +13,10 @@ class TestDCM2NII(unittest.TestCase):
     def setUp(self):
         # Get working dir
         self.tmp_path_1dcm = Path('tests')/'TestDicoms_Phantom1Dicom'
+
+    def tearDown(self) -> None:
+        for file in self.tmp_path_1dcm.glob('*.nii'):
+            os.remove(file)
 
     def test_1dcm2nii(self):
         # call DCM2NII  and save the results
