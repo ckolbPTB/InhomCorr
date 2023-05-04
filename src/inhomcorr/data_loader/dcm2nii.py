@@ -12,7 +12,7 @@ import dicom2nifti.settings as settings
 
 
 def convert_dcm2nii_dir(folder_in_dicom: Path,
-                        folder_out_nifti: Path | None = None) -> list:
+                        folder_out_nifti: Path | None = None) -> list[Path]:
     """Convert dicoms in a directory to niftis.
 
     Parameters
