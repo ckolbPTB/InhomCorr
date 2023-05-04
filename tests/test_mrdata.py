@@ -20,6 +20,11 @@ class TestImageData(unittest.TestCase):
             dummy = ImageData(torch.rand(self.shape, dtype=torch.float))
             dummy.data = torch.rand(self.wrong_shape, dtype=torch.float)
 
+    def test_mask_setter_exception(self):
+        with self.assertRaises(RuntimeError):
+            dummy = ImageData(torch.rand(self.shape, dtype=torch.float))
+            dummy.mask = torch.rand(self.wrong_shape, dtype=torch.float)
+
     def test_2D_shape(self):
         data = torch.rand(self.shape, dtype=torch.float)
         dummy = ImageData(data)
@@ -46,6 +51,11 @@ class TestQMRIData(unittest.TestCase):
         self.data = TestData(qmri_shape=self.qmri_shape)
         self.t1_test = torch.rand(self.qmri_shape, dtype=torch.float)
         self.rho_test = torch.rand(self.qmri_shape, dtype=torch.float)
+
+    def test_mask_setter_exception(self):
+        with self.assertRaises(RuntimeError):
+            dummy = QMRIData(t1=torch.rand(self.qmri_shape, dtype=torch.float))
+            dummy.mask = torch.rand(self.wrong_shape, dtype=torch.float)
 
     def test_t1_setter_excecption(self):
         with self.assertRaises(RuntimeError):
