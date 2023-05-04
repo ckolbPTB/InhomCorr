@@ -4,8 +4,19 @@ import unittest
 import torch
 
 from inhomcorr.mrdata import ImageData
+from inhomcorr.mrdata import MRData
 from inhomcorr.mrdata import QMRIData
 from tests.testdata import TestData
+
+
+class TestMRData(unittest.TestCase):
+
+    @unittest.mock.patch.multiple(MRData, __abstractmethods__=set())
+    def test_mask_setter_exeption(self):
+        with self.assertRaises(RuntimeError):
+            dummy = MRData()
+            dummy._shape = (1, 1, 8, 8)
+            dummy.mask = torch.rand((1, 1, 16, 16), dtype=torch.float)
 
 
 class TestImageData(unittest.TestCase):
